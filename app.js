@@ -86,7 +86,7 @@ function PoccessMessage(chat) {
 		lastUserMessage = chat.thread[chat.thread.length - 1];
 	}
 	
-	console.log(adminid);
+	console.log(adminId);
 	
 	if (lastUserMessage != null && lastUserMessage.message.text != null) {
 		var order = posibleOrders.find(x => x.command == lastUserMessage.message.text);
