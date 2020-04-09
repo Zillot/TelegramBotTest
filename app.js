@@ -86,6 +86,8 @@ function PoccessMessage(chat) {
 		lastUserMessage = chat.thread[chat.thread.length - 1];
 	}
 	
+	console.log(adminid);
+	
 	if (lastUserMessage != null && lastUserMessage.message.text != null) {
 		var order = posibleOrders.find(x => x.command == lastUserMessage.message.text);
 		
@@ -586,6 +588,10 @@ function CraetTables() {
 				}
 			}, 3000);
 		}, 2000);
+		
+		setInterval(() => {
+			GlobalOffsetSave();
+		}, 60000);
 	}, 2000);
 }
 
@@ -593,5 +599,9 @@ function ConfirmSetupsSave() {
 	var json = JSON.stringify(setupsData);
 	runSql(`UPDATE public.botsetups SET json=${json} WHERE id=1;`, (res) => {});
 	
+	runSql(`UPDATE public.adminasetups SET adminid=${adminId}, globaloffset=${globalOffset} WHERE id=1;`, (res) => {});
+}
+
+function GlobalOffsetSave() {
 	runSql(`UPDATE public.adminasetups SET adminid=${adminId}, globaloffset=${globalOffset} WHERE id=1;`, (res) => {});
 }
