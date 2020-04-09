@@ -43,33 +43,33 @@ let globalMessages = [];
 let globalOffset = 0;
 
 express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .get('/', (req, res) => res.send(cool()))
-  .get('/SetDefaults', (requester, responcer) => {
-	  DefaultData();
-  })
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+	.use(express.static(path.join(__dirname, 'public')))
+	.get('/', (req, res) => res.send(cool()))
+	.get('/SetDefaults', (requester, responcer) => {
+		DefaultData();
+	})
+	.get('/SetWebHooks', (requester, responcer) => {
+		console.log(requester);
+
+		Loop([]);
+		
+		responcer.send("success");
+	})
+	.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 	
 CraetTables();
 
-function Loop() {
+function Loop(newMessages) {
 	let mesages = "";
 	
-	CheckUpdates(globalOffset, (error, response) => {
-		if (error) { errorHandler(error); }
-		
-		globalMessages = globalMessages.concat(response.body.result);
-		if (globalMessages != null && globalMessages.length > 0){ 
-			globalOffset = globalMessages[globalMessages.length - 1].update_id;
-		}
-		
-		let chats = GetMessagesByChat(response.body.result);
-		let updatedChatIds = GetChatIdsWithUpdates(response.body.result);
-		
-		updatedChatIds.forEach(updatedChatId => {			
-			var chat = chats.find(x => x.id == updatedChatId)
-			PoccessMessage(chat);
-		});
+	globalMessages = globalMessages.concat(newMessages);
+	
+	let chats = GetMessagesByChat(response.body.result);
+	let updatedChatIds = GetChatIdsWithUpdates(response.body.result);
+	
+	updatedChatIds.forEach(updatedChatId => {			
+		var chat = chats.find(x => x.id == updatedChatId)
+		PoccessMessage(chat);
 	});
 }
 
@@ -429,6 +429,22 @@ function CheckUpdates(offset, callback) {
 	}, 500);
 }
 
+function SendWebhook(hookUrl, callback) {
+	hookUrl = GetTextLineForUrl(hookUrl);
+	
+	var url = `https://api.telegram.org/${setupsData.telegramBotToken}/setWebhook?url=${hookUrl}`;
+	
+	setTimeout(() => {
+		request({ url: url, method: 'POST', json: true }, (error, res, body) => {
+			if (error || res.statusCode !== 200) {
+				return callback(error || {statusCode: res.statusCode});
+			}
+			
+			callback(null, res);
+		});
+	}, 500);
+}
+
 function SendMessage(chat_id, text, callback) {
 	text = GetTextLineForUrl(text);
 	
@@ -578,6 +594,8 @@ function runSql(script, callback) {
 }
 
 function CraetTables() {
+	SendWebhook("https://telegram-bot-test-by-mykola.herokuapp.com/Webhook?token=9955cac3-581f-4950-8d8e-b3573f6427c4");
+	
 	DefaultData();
 	
 	runSql("CREATE TABLE IF NOT EXISTS BotSetups ( id int, json TEXT )", (res) => {});
@@ -614,14 +632,6 @@ function CraetTables() {
 			});
 			
 			LoadSetups();
-
-			setTimeout(() => {
-				setInterval(() => {
-					if (setupsData.telegramBotToken != '') {	
-						Loop();
-					}
-				}, 3000);
-			}, 2000);
 			
 			setInterval(() => {
 				GlobalOffsetSave();
