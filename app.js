@@ -51,7 +51,10 @@ express()
 		DefaultData();
 	})
 	.post('/SetWebHooks', (requester, responcer) => {
-		Loop([requester.body]);
+		var message = requester.body;
+		console.log("hooked"+JSON.stringify(message));
+		
+		Loop([message]);
 		
 		responcer.send("success");
 	})
