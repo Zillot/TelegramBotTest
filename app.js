@@ -526,8 +526,6 @@ function LoadSetups() {
 		{ text: setupsData.questionForAdminSetups, orderNum: 101, posibleAnsvers: [], command: 'Setups' },
 		{ text: setupsData.questionForAdminStep1, orderNum: 100, posibleAnsvers: ButtonsToList(buttonsForAdmin), command: '/admin' },
 	];
-	
-	Loop(null);
 }
 
 function DefaultData() {
