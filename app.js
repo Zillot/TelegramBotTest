@@ -601,12 +601,12 @@ function CraetTables() {
 	
 	DefaultData();
 	
-	runSql("CREATE TABLE IF NOT EXISTS BotSetups ( id int, json TEXT )", (res) => {});
+	runSql("CREATE TABLE IF NOT EXISTS botsetups ( id int, json TEXT )", (res) => {});
 	
-	runSql("CREATE TABLE IF NOT EXISTS AdminASetups ( id int, adminId TEXT, globalOffset TEXT )", (res) => {});
+	runSql("CREATE TABLE IF NOT EXISTS adminsetups ( id int, adminId TEXT, globalOffset TEXT )", (res) => {});
 	
 	setTimeout(() => {
-		runSql("Select * From BotSetups", (res) => {
+		runSql("Select * From botsetups", (res) => {
 			if (!res.rows || res.rows.length == 0) {
 				var json = JSON.stringify(setupsData);
 				runSql(`INSERT INTO public.botsetups(id, json) VALUES (1, "${json}")`, (res) => {
@@ -614,19 +614,19 @@ function CraetTables() {
 			}
 		});
 		
-		runSql("Select * From AdminASetups", (res) => {
+		runSql("Select * From adminsetups", (res) => {
 			if (!res.rows || res.rows.length == 0) {
-				runSql(`INSERT INTO public.adminasetups(id, adminid, globaloffset) VALUES (1, ${adminId}, ${globalOffset})`, (res) => { });
+				runSql(`INSERT INTO public.adminsetups(id, adminid, globaloffset) VALUES (1, ${adminId}, ${globalOffset})`, (res) => { });
 			}
 		});
 		
 		setTimeout(() => {
-			runSql("Select * From AdminASetups", (res) => {			
+			runSql("Select * From adminsetups", (res) => {			
 				adminId = parseInt(res.rows[0].adminid);
 				globalOffset = parseInt(res.rows[0].globaloffset);
 			});
 			
-			runSql("Select * From BotSetups", (res) => {
+			runSql("Select * From botsetups", (res) => {
 				let json = res.rows[0].json;
 				setupsData = JSON.parse(json);
 			});
@@ -644,9 +644,9 @@ function ConfirmSetupsSave() {
 	var json = JSON.stringify(setupsData);
 	runSql(`UPDATE public.botsetups SET json=${json} WHERE id=1;`, (res) => {});
 	
-	runSql(`UPDATE public.adminasetups SET adminid=${adminId}, globaloffset=${globalOffset} WHERE id=1;`, (res) => {});
+	runSql(`UPDATE public.adminsetups SET adminid=${adminId}, globaloffset=${globalOffset} WHERE id=1;`, (res) => {});
 }
 
 function GlobalOffsetSave() {
-	runSql(`UPDATE public.adminasetups SET adminid=${adminId}, globaloffset=${globalOffset} WHERE id=1;`, (res) => {});
+	runSql(`UPDATE public.adminsetups SET adminid=${adminId}, globaloffset=${globalOffset} WHERE id=1;`, (res) => {});
 }
