@@ -105,7 +105,7 @@ function PoccessMessage(chat) {
 		return;
 	}
 	
-	if (updatedChatId == setupsData.ignoreChatId) {		
+	if (chat.id == setupsData.ignoreChatId) {		
 		return;
 	}
 	
@@ -611,7 +611,6 @@ function CraetTables() {
 			
 			LoadSetups();
 
-			
 			setTimeout(() => {
 				setInterval(() => {
 					if (setupsData.telegramBotToken != '') {	
