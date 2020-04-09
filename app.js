@@ -569,8 +569,8 @@ function CraetTables() {
 		
 	setTimeout(() => {
 		runSql("Select * From AdminASetups", (res) => {			
-			adminId = parseInt(res.rows[0].adminId);
-			globalOffset = parseInt(res.rows[0].globalOffset);
+			adminId = parseInt(res.rows[0].adminid);
+			globalOffset = parseInt(res.rows[0].globaloffset);
 		});
 		
 		runSql("Select * From BotSetups", (res) => {
