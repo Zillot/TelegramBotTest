@@ -64,8 +64,8 @@ function Loop(newMessages) {
 	
 	globalMessages = globalMessages.concat(newMessages);
 	
-	let chats = GetMessagesByChat(response.body.result);
-	let updatedChatIds = GetChatIdsWithUpdates(response.body.result);
+	let chats = GetMessagesByChat(globalMessages);
+	let updatedChatIds = GetChatIdsWithUpdates(newMessages);
 	
 	updatedChatIds.forEach(updatedChatId => {			
 		var chat = chats.find(x => x.id == updatedChatId)
