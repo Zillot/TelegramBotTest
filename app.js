@@ -567,31 +567,25 @@ function CraetTables() {
 		
 	setTimeout(() => {
 		runSql("Select * From AdminASetups", (res) => {			
-			console.log("Select * From AdminASetups")
-			console.log(res.rows);
-			
 			adminId = res.rows[0].adminId;
 			globalOffset = res.rows[0].globalOffset;
 		});
 		
 		runSql("Select * From BotSetups", (res) => {
-			console.log("Select * From BotSetups")
-			console.log(res.rows);
-			
 			let json = res.rows[0].json;
 			setupsData = JSON.parse(json);
 		});
 		
 		LoadSetups();
 
-		/*
+		
 		setTimeout(() => {
 			setInterval(() => {
 				if (setupsData.telegramBotToken != '') {	
 					Loop();
 				}
 			}, 3000);
-		}, 2000);*/
+		}, 2000);
 	}, 2000);
 }
 
