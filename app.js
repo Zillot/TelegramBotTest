@@ -51,9 +51,7 @@ express()
 		DefaultData();
 	})
 	.get('/SetWebHooks', (requester, responcer) => {
-		console.log(requester);
-
-		Loop([req.body]);
+		Loop([requester.body]);
 		
 		responcer.send("success");
 	})
