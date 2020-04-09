@@ -86,7 +86,12 @@ function PoccessMessage(chat) {
 		lastUserMessage = chat.thread[chat.thread.length - 1];
 	}
 	
-	console.log(adminId);
+	if (lastUserMessage != null && lastUserMessage.message.text != null) {
+		if (lastUserMessage.message.text == '/start') {
+			Step1(chat, chatResult);
+			return;
+		}
+	}
 	
 	if (lastUserMessage != null && lastUserMessage.message.text != null) {
 		var order = posibleOrders.find(x => x.command == lastUserMessage.message.text);
