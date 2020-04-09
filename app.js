@@ -11,14 +11,6 @@ const PORT = process.env.PORT || 5000
 
 let lastProcessDate = null;
 
-const pool = new Pool({
-	user: "bysidpvwnrioco",
-	host: "ec2-54-217-204-34.eu-west-1.compute.amazonaws.com",
-	database: "d2ein0u2eht31k",
-	password: "7b9d068106d53fe2dabffe7dd714fc8a902ed8d9b2f1a4f106c8756bb27eb0f4",
-	port: 5432
-});
-
 let setupsData = {
 	helloText: '',
 	errorText: '',
