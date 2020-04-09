@@ -42,9 +42,9 @@ let chatResults = [];
 let globalMessages = [];
 let globalOffset = 0;
 
-app.use(express.json());
 
 express()
+	.use(express.json())
 	.use(express.static(path.join(__dirname, 'public')))
 	.get('/', (req, res) => res.send(cool()))
 	.get('/SetDefaults', (requester, responcer) => {
