@@ -580,49 +580,51 @@ function runSql(script, callback) {
 function CraetTables() {
 	DefaultData();
 	
-	runSql("CREATE TABLE IF NOT EXISTS BotSetups ( id int, json TEXT )", (res) => {
+	runSql("CREATE TABLE IF NOT EXISTS BotSetups ( id int, json TEXT )", (res) => {});
+	
+	runSql("CREATE TABLE IF NOT EXISTS AdminASetups ( id int, adminId TEXT, globalOffset TEXT )", (res) => {});
+	
+	setTimeout(() => {
 		runSql("Select * From BotSetups", (res) => {
-			if (res.rows.length == 0) {
+			if (!res.rows || res.rows.length == 0) {
 				var json = JSON.stringify(setupsData);
 				runSql(`INSERT INTO public.botsetups(id, json) VALUES (1, ${json}`, (res) => {});
 			}
 		});
-	});
-	
-	runSql("CREATE TABLE IF NOT EXISTS AdminASetups ( id int, adminId TEXT, globalOffset TEXT )", (res) => {
+		
 		runSql("Select * From AdminASetups", (res) => {
-			if (res.rows.length == 0) {
+			if (!res.rows || res.rows.length == 0) {
 				runSql(`INSERT INTO public.adminasetups(id, adminid, globaloffset) VALUES (1, ${adminId}, ${globalOffset})`, (res) => { });
 			}
 		});
-	});
-		
-	setTimeout(() => {
-		runSql("Select * From AdminASetups", (res) => {			
-			adminId = parseInt(res.rows[0].adminid);
-			globalOffset = parseInt(res.rows[0].globaloffset);
-		});
-		
-		runSql("Select * From BotSetups", (res) => {
-			let json = res.rows[0].json;
-			setupsData = JSON.parse(json);
-		});
-		
-		LoadSetups();
-
 		
 		setTimeout(() => {
+			runSql("Select * From AdminASetups", (res) => {			
+				adminId = parseInt(res.rows[0].adminid);
+				globalOffset = parseInt(res.rows[0].globaloffset);
+			});
+			
+			runSql("Select * From BotSetups", (res) => {
+				let json = res.rows[0].json;
+				setupsData = JSON.parse(json);
+			});
+			
+			LoadSetups();
+
+			
+			setTimeout(() => {
+				setInterval(() => {
+					if (setupsData.telegramBotToken != '') {	
+						Loop();
+					}
+				}, 3000);
+			}, 2000);
+			
 			setInterval(() => {
-				if (setupsData.telegramBotToken != '') {	
-					Loop();
-				}
-			}, 3000);
+				GlobalOffsetSave();
+			}, 60000);
 		}, 2000);
-		
-		setInterval(() => {
-			GlobalOffsetSave();
-		}, 60000);
-	}, 2000);
+	}, 1000)
 }
 
 function ConfirmSetupsSave() {
