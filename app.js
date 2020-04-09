@@ -66,11 +66,7 @@ function Loop() {
 		let chats = GetMessagesByChat(response.body.result);
 		let updatedChatIds = GetChatIdsWithUpdates(response.body.result);
 		
-		updatedChatIds.forEach(updatedChatId => {
-			if (updatedChatId == setupsData.ignoreChatId) {
-				return;
-			}
-			
+		updatedChatIds.forEach(updatedChatId => {			
 			var chat = chats.find(x => x.id == updatedChatId)
 			PoccessMessage(chat);
 		});
@@ -91,6 +87,26 @@ function PoccessMessage(chat) {
 	let lastUserMessage = null;
 	if (chat.thread.length > 0) {
 		lastUserMessage = chat.thread[chat.thread.length - 1];
+	}
+	
+	if (lastUserMessage != null && lastUserMessage.message.text == '/getgroupid') {
+		SendMessage(chat.id, lastUserMessage.message.chat.id, (error, response) => {
+			if (error) { errorHandler(error); }
+		});
+		
+		return;
+	}
+	
+	if (lastUserMessage != null && lastUserMessage.message.text == '/getmyid') {
+		SendMessage(chat.id, lastUserMessage.message.from.id, (error, response) => {
+			if (error) { errorHandler(error); }
+		});
+		
+		return;
+	}
+	
+	if (updatedChatId == setupsData.ignoreChatId) {		
+		return;
 	}
 	
 	if (lastUserMessage != null && lastUserMessage.message.text != null) {
@@ -526,6 +542,8 @@ function DefaultData() {
 		questionForAdminStep1: 'Що треба змінити?',
 		questionForAdminSetups: 'Мені потрібен JSON з налаштуваннями, ось поточній, напиши /admin для відміни',
 		questionForAdminRights: 'Кому передаті права? Напиши Id користувача.',
+		telegramChatIdToPublish: -458746802,
+		ignoreChatId: 123
 	}
 }
 
