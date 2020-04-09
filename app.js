@@ -556,8 +556,6 @@ function CraetTables() {
 			}
 		});
 	});
-				var json = JSON.stringify(setupsData);
-				runSql(`INSERT INTO public.botsetups(id, json) VALUES (1, ${json}`, (res) => {});
 	
 	runSql("CREATE TABLE IF NOT EXISTS AdminASetups ( id int, adminId TEXT, globalOffset TEXT )", (res) => {
 		runSql("Select * From AdminASetups", (res) => {
