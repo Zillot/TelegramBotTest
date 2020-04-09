@@ -26,7 +26,8 @@ let setupsData = {
 	questionForStep4: '',
 	
 	telegramBotToken: '',
-	telegramChatIdToPublish: 0,
+	telegramChatIdToPublish: -458746802,
+	ignoreChatId: 123,
 }
 	
 let adminId;
@@ -58,12 +59,18 @@ function Loop() {
 		if (error) { errorHandler(error); }
 		
 		globalMessages = globalMessages.concat(response.body.result);
-		globalOffset = globalMessages[globalMessages.length - 1].update_id;
+		if (globalMessages != null && globalMessages.length > 0){ 
+			globalOffset = globalMessages[globalMessages.length - 1].update_id;
+		}
 		
 		let chats = GetMessagesByChat(response.body.result);
 		let updatedChatIds = GetChatIdsWithUpdates(response.body.result);
 		
 		updatedChatIds.forEach(updatedChatId => {
+			if (updatedChatId == setupsData.ignoreChatId) {
+				return;
+			}
+			
 			var chat = chats.find(x => x.id == updatedChatId)
 			PoccessMessage(chat);
 		});
