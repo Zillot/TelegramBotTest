@@ -64,6 +64,10 @@ function Loop(newMessages) {
 	
 	globalMessages = globalMessages.concat(newMessages);
 	
+	if (globalMessages.length == 0) {
+		return;
+	}
+	
 	let chats = GetMessagesByChat(globalMessages);
 	let updatedChatIds = GetChatIdsWithUpdates(newMessages);
 	
