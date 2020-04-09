@@ -609,12 +609,11 @@ function CraetTables() {
 		runSql("Select * From botsetups", (res) => {
 			if (!res.rows || res.rows.length == 0) {
 				var json = JSON.stringify(setupsData);
-				runSql(`INSERT INTO public.botsetups(id, json) VALUES (1, "${json}")`, (res) => { });
+				runSql(`INSERT INTO public.botsetups(id, json) VALUES (1, '${json}')`, (res) => { });
 			}
 		});
 		
 		runSql("Select * From adminsetups", (res) => {
-				console.log("22222222222HEREHEREHEREHEREHEREHEREHERE"+JSON.stringify(res));
 			if (!res.rows || res.rows.length == 0) {
 				runSql(`INSERT INTO public.adminsetups(id, adminid, globaloffset) VALUES (1, ${adminId}, ${globalOffset})`, (res) => { });
 			}
@@ -627,7 +626,6 @@ function CraetTables() {
 			});
 			
 			runSql("Select * From botsetups", (res) => {
-				console.log("HEREHEREHEREHEREHEREHEREHERE"+JSON.stringify(res));
 				let json = res.rows[0].json;
 				setupsData = JSON.parse(json);
 			});
