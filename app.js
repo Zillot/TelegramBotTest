@@ -556,18 +556,18 @@ function runSql(script, callback) {
 
 function CraetTables() {
 	runSql("CREATE TABLE IF NOT EXISTS BotSetups ( id int, json TEXT )", (res) => {
-		console.log(res);
+		
 	});
 	runSql("CREATE TABLE IF NOT EXISTS AdminASetups ( id int, adminId TEXT, globalOffset TEXT )", (res) => {
-		console.log(res);
+		
 	});
 	runSql("Select * From BotSetups", (res) => {
 		console.log("Select * From BotSetups")
-		console.log(res);
+		console.log(res.rows);
 	});
 	runSql("Select * From AdminASetups", (res) => {
 		console.log("Select * From AdminASetups")
-		console.log(res);
+		console.log(res.rows);
 	});
 		
 	LoadSetups();
