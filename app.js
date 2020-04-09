@@ -614,7 +614,7 @@ function CraetTables() {
 		});
 		
 		runSql("Select * From adminsetups", (res) => {
-				console.log(res);
+				console.log("22222222222HEREHEREHEREHEREHEREHEREHERE"+res);
 			if (!res.rows || res.rows.length == 0) {
 				runSql(`INSERT INTO public.adminsetups(id, adminid, globaloffset) VALUES (1, ${adminId}, ${globalOffset})`, (res) => { });
 			}
@@ -627,7 +627,7 @@ function CraetTables() {
 			});
 			
 			runSql("Select * From botsetups", (res) => {
-				console.log(res);
+				console.log("HEREHEREHEREHEREHEREHEREHERE"+res);
 				let json = res.rows[0].json;
 				setupsData = JSON.parse(json);
 			});
