@@ -552,12 +552,12 @@ function ButtonsToList(buttonsLines) {
 }
 
 function CraetTables() {
-	pool.query("SELECT * from Setups", (err, res) => {
+	pool.query("SELECT * from BotSetups", (err, res) => {
 		 if(err) throw err;
 		console.log(err, res);
 	});
 	
-	pool.query("CREATE TABLE Setups ( id int, json TEXT )", (err, res) => {
+	pool.query("CREATE TABLE BotSetups ( id int, json TEXT )", (err, res) => {
 		 if(err) throw err;
 		console.log(err, res);
 	});
