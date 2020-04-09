@@ -3,8 +3,7 @@ const express = require('express')
 const path = require('path')
 const request = require('request');
 
-const pg = require('pg');
-const q = require('q');
+const {Pool, Client} = require('pg');
 const conString = 'postgres://bysidpvwnrioco:7b9d068106d53fe2dabffe7dd714fc8a902ed8d9b2f1a4f106c8756bb27eb0f4@ec2-54-217-204-34.eu-west-1.compute.amazonaws.com:5432/d2ein0u2eht31k';
 
 const PORT = process.env.PORT || 5000
@@ -545,33 +544,40 @@ function ButtonsToList(buttonsLines) {
 	return buttons;
 }
 
-function runSQL (sqlStatement) {
-    var deferred = q.defer(); 
-    var results = [];
+function runSql(script, callback) {
+	let pool = new Pool({
+		user: "bysidpvwnrioco",
+		host: "ec2-54-217-204-34.eu-west-1.compute.amazonaws.com",
+		database: "d2ein0u2eht31k",
+		password: "7b9d068106d53fe2dabffe7dd714fc8a902ed8d9b2f1a4f106c8756bb27eb0f4",
+		port: 5432
+	});
 
-    pg.connect(conString, function(err, client, done) {
-        var query = client.query(sqlStatement, function(err, res) {
-            if(err) console.log(err);
-            deferred.resolve(res);
-        });
-
-        query.on('end', function() {
-            client.end();
-            deferred.resolve(results);
-        });
-
-        if(err) {
-          console.log(err);
-        }
-    });
-
-    return deferred.promise;
-};
+	pool.query(script, (err, res) => {
+		if(err) throw err;
+		
+		callback(res);
+		
+		pool.end();
+	});
+}
 
 function CraetTables() {
-	runSQL("CREATE TABLE IF NOT EXISTS BotSetups ( id int, json TEXT )").then(function(res) {});
-	runSQL("CREATE TABLE IF NOT EXISTS AdminASetups ( id int, adminId TEXT, globalOffset TEXT )").then(function(res) {});
-
+	runSql("CREATE TABLE IF NOT EXISTS BotSetups ( id int, json TEXT )", (res) => {
+		console.log(res);
+	});
+	runSql("CREATE TABLE IF NOT EXISTS AdminASetups ( id int, adminId TEXT, globalOffset TEXT )", (res) => {
+		console.log(res);
+	});
+	runSql("Select * From BotSetups", (res) => {
+		console.log("Select * From BotSetups")
+		console.log(res);
+	});
+	runSql("Select * From AdminASetups", (res) => {
+		console.log("Select * From AdminASetups")
+		console.log(res);
+	});
+		
 	LoadSetups();
 
 /*
@@ -583,3 +589,4 @@ function CraetTables() {
 		}, 3000);
 	}, 2000);*/
 }
+
