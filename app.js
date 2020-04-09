@@ -579,7 +579,7 @@ function CraetTables() {
 			console.log(res.rows);
 			
 			let json = res.rows[0].json;
-			setupsData = JSON.Parse(json);
+			setupsData = JSON.parse(json);
 		});
 		
 		LoadSetups();
