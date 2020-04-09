@@ -469,14 +469,6 @@ function ConfirmSetupsSave() {
 function LoadSetups() {	
 	DefaultData();
 	
-	runSQL("SELECT * FROM BotSetups").then(function(res) {
-		console.log(res);
-	});
-	
-	runSQL("SELECT * FROM AdminASetups").then(function(res) {
-		console.log(res);
-	});
-	
 	buttonsForAdmin = [["Rights"], ["Setups"]];
 	
 	posibleOrders = [
