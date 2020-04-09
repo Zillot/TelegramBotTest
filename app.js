@@ -39,7 +39,7 @@ let posibleOrders = [];
 let chatResults = [];
 
 let globalMessages = [];
-let globalOffset = 333702563;
+let globalOffset = 0;
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
@@ -462,13 +462,7 @@ function errorHandler(error) {
 }
 
 //======= Setups =========
-function ConfirmSetupsSave() {
-	//TODO save to DB setupsData and adminId and globalOffset
-}
-
-function LoadSetups() {	
-	DefaultData();
-	
+function LoadSetups() {		
 	buttonsForAdmin = [["Rights"], ["Setups"]];
 	
 	posibleOrders = [
@@ -546,39 +540,63 @@ function runSql(script, callback) {
 	});
 
 	pool.query(script, (err, res) => {
-		if(err) throw err;
-		
 		callback(res);
-		
 		pool.end();
 	});
 }
 
 function CraetTables() {
+	DefaultData();
+	
 	runSql("CREATE TABLE IF NOT EXISTS BotSetups ( id int, json TEXT )", (res) => {
-		
-	});
-	runSql("CREATE TABLE IF NOT EXISTS AdminASetups ( id int, adminId TEXT, globalOffset TEXT )", (res) => {
-		
-	});
-	runSql("Select * From BotSetups", (res) => {
-		console.log("Select * From BotSetups")
-		console.log(res.rows);
-	});
-	runSql("Select * From AdminASetups", (res) => {
-		console.log("Select * From AdminASetups")
-		console.log(res.rows);
-	});
-		
-	LoadSetups();
-
-/*
-	setTimeout(() => {
-		setInterval(() => {
-			if (setupsData.telegramBotToken != '') {	
-				Loop();
+		runSql("Select * From BotSetups", (res) => {
+			if (res.rows.length == 0) {
+				runSql(`INSERT INTO public.botsetups(id, json) VALUES (1, ${json}`, (res) => {});
 			}
-		}, 3000);
-	}, 2000);*/
+		});
+	});
+	
+	runSql("CREATE TABLE IF NOT EXISTS AdminASetups ( id int, adminId TEXT, globalOffset TEXT )", (res) => {
+		runSql("Select * From AdminASetups", (res) => {
+			if (res.rows.length == 0) {
+				runSql(`INSERT INTO public.adminasetups(id, adminid, globaloffset) VALUES (1, ${adminId}, ${globalOffset})`, (res) => { });
+			}
+		});
+	});
+		
+	setTimeout(() => {
+		runSql("Select * From AdminASetups", (res) => {			
+			console.log("Select * From AdminASetups")
+			console.log(res.rows);
+			
+			adminId = res.rows[0].adminId;
+			globalOffset = res.rows[0].globalOffset;
+		});
+		
+		runSql("Select * From BotSetups", (res) => {
+			console.log("Select * From BotSetups")
+			console.log(res.rows);
+			
+			let json = res.rows[0].json;
+			setupsData = JSON.Parse(json);
+		});
+		
+		LoadSetups();
+
+		/*
+		setTimeout(() => {
+			setInterval(() => {
+				if (setupsData.telegramBotToken != '') {	
+					Loop();
+				}
+			}, 3000);
+		}, 2000);*/
+	}, 2000);
 }
 
+function ConfirmSetupsSave() {
+	var json = JSON.stringify(setupsData);
+	runSql(`UPDATE public.botsetups SET json=${json} WHERE id=1;`, (res) => {});
+	
+	runSql(`UPDATE public.adminasetups SET adminid=${adminId}, globaloffset=${globalOffset} WHERE id=1;`, (res) => {});
+}
