@@ -42,6 +42,8 @@ let chatResults = [];
 let globalMessages = [];
 let globalOffset = 0;
 
+app.use(express.json());
+
 express()
 	.use(express.static(path.join(__dirname, 'public')))
 	.get('/', (req, res) => res.send(cool()))
@@ -51,7 +53,7 @@ express()
 	.get('/SetWebHooks', (requester, responcer) => {
 		console.log(requester);
 
-		Loop([]);
+		Loop([req.body]);
 		
 		responcer.send("success");
 	})
@@ -436,7 +438,7 @@ function CheckUpdates(offset, callback) {
 function SendWebhook(hookUrl, callback) {
 	hookUrl = GetTextLineForUrl(hookUrl);
 	
-	var url = `https://api.telegram.org/${setupsData.telegramBotToken}/setWebhook?url=${hookUrl}`;
+	var url = `https://api.telegram.org/${setupsData.telegramBotToken}/setWebhook?url=${hookUrl}&max_connections=10`;
 	
 	setTimeout(() => {
 		request({ url: url, method: 'POST', json: true }, (error, res, body) => {
