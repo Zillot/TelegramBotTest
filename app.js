@@ -586,9 +586,13 @@ function CraetTables() {
 	
 	setTimeout(() => {
 		runSql("Select * From BotSetups", (res) => {
+			console.log(res);
 			if (!res.rows || res.rows.length == 0) {
+			console.log("inserting");
 				var json = JSON.stringify(setupsData);
-				runSql(`INSERT INTO public.botsetups(id, json) VALUES (1, ${json}`, (res) => {});
+				runSql(`INSERT INTO public.botsetups(id, json) VALUES (1, ${json})`, (res) => {
+					console.log("inserting_" + res);
+				});
 			}
 		});
 		
