@@ -50,7 +50,7 @@ express()
 	.get('/SetDefaults', (requester, responcer) => {
 		DefaultData();
 	})
-	.get('/SetWebHooks', (requester, responcer) => {
+	.post('/SetWebHooks', (requester, responcer) => {
 		Loop([requester.body]);
 		
 		responcer.send("success");
@@ -596,7 +596,7 @@ function runSql(script, callback) {
 }
 
 function CraetTables() {
-	SendWebhook("https://telegram-bot-test-by-mykola.herokuapp.com/Webhook?token=9955cac3-581f-4950-8d8e-b3573f6427c4", () => {
+	SendWebhook("https://telegram-bot-test-by-mykola.herokuapp.com/SetWebHooks?token=9955cac3-581f-4950-8d8e-b3573f6427c4", () => {
 	});
 	
 	DefaultData();
