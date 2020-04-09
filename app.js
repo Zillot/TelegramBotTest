@@ -551,6 +551,7 @@ function CraetTables() {
 	runSql("CREATE TABLE IF NOT EXISTS BotSetups ( id int, json TEXT )", (res) => {
 		runSql("Select * From BotSetups", (res) => {
 			if (res.rows.length == 0) {
+				var json = JSON.stringify(setupsData);
 				runSql(`INSERT INTO public.botsetups(id, json) VALUES (1, ${json}`, (res) => {});
 			}
 		});
