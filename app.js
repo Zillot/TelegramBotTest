@@ -8,7 +8,7 @@ const conString = 'postgres://bysidpvwnrioco:7b9d068106d53fe2dabffe7dd714fc8a902
 
 const PORT = process.env.PORT || 5000
 
-let lastProcessDate = null;
+let lastProcessDate = 0;
 
 let setupsData = {
 	helloText: '',
@@ -40,8 +40,6 @@ let posibleOrders = [];
 let chatResults = [];
 
 let globalMessages = [];
-let globalOffset = 0;
-
 
 express()
 	.use(express.json())
@@ -374,10 +372,6 @@ function SetOrderToChat(chat, chatResult, order) {
 function GetChatIdsWithUpdates(messages) {
 	var chatIds = [];
 	
-	if (lastProcessDate == null) {
-		lastProcessDate = 0;
-	}
-	
 	messages.forEach(item => {		
 		if (item.message.date > lastProcessDate) {
 			if (chatIds.find(x => x == item.message.chat.id) == null) {
@@ -534,8 +528,6 @@ function LoadSetups() {
 }
 
 function DefaultData() {
-	globalOffset = 0;
-
 	adminId = 267835012;
 	
 	setupsData = {
@@ -608,7 +600,7 @@ function CraetTables() {
 	
 	runSql("CREATE TABLE IF NOT EXISTS botsetups ( id int, json TEXT )", (res) => {});
 	
-	runSql("CREATE TABLE IF NOT EXISTS adminsetups ( id int, adminId TEXT, globalOffset TEXT )", (res) => {});
+	runSql("CREATE TABLE IF NOT EXISTS adminsetups ( id int, adminId TEXT )", (res) => {});
 	
 	setTimeout(() => {
 		runSql("Select * From botsetups", (res) => {
@@ -620,14 +612,13 @@ function CraetTables() {
 		
 		runSql("Select * From adminsetups", (res) => {
 			if (!res.rows || res.rows.length == 0) {
-				runSql(`INSERT INTO public.adminsetups(id, adminid, globaloffset) VALUES (1, ${adminId}, ${globalOffset})`, (res) => { });
+				runSql(`INSERT INTO public.adminsetups(id, adminid) VALUES (1, ${adminId})`, (res) => { });
 			}
 		});
 		
 		setTimeout(() => {
 			runSql("Select * From adminsetups", (res) => {			
 				adminId = parseInt(res.rows[0].adminid);
-				globalOffset = parseInt(res.rows[0].globaloffset);
 			});
 			
 			runSql("Select * From botsetups", (res) => {
@@ -636,10 +627,6 @@ function CraetTables() {
 			});
 			
 			LoadSetups();
-			
-			setInterval(() => {
-				GlobalOffsetSave();
-			}, 60000);
 		}, 5000);
 	}, 1000)
 }
@@ -648,9 +635,5 @@ function ConfirmSetupsSave() {
 	var json = JSON.stringify(setupsData);
 	runSql(`UPDATE public.botsetups SET json=${json} WHERE id=1;`, (res) => {});
 	
-	runSql(`UPDATE public.adminsetups SET adminid=${adminId}, globaloffset=${globalOffset} WHERE id=1;`, (res) => {});
-}
-
-function GlobalOffsetSave() {
-	runSql(`UPDATE public.adminsetups SET adminid=${adminId}, globaloffset=${globalOffset} WHERE id=1;`, (res) => {});
+	runSql(`UPDATE public.adminsetups SET adminid=${adminId} WHERE id=1;`, (res) => {});
 }
