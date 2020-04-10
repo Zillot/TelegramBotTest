@@ -374,15 +374,17 @@ function SetOrderToChat(chat, chatResult, order) {
 function GetChatIdsWithUpdates(messages) {
 	var chatIds = [];
 	
-	if (lastProcessDate != null) {
-		messages.forEach(item => {		
-			if (item.message.date > lastProcessDate) {
-				if (chatIds.find(x => x == item.message.chat.id) == null) {
-					chatIds.push(item.message.chat.id);
-				}
-			}
-		});
+	if (lastProcessDate == null) {
+		lastProcessDate = 0;
 	}
+	
+	messages.forEach(item => {		
+		if (item.message.date > lastProcessDate) {
+			if (chatIds.find(x => x == item.message.chat.id) == null) {
+				chatIds.push(item.message.chat.id);
+			}
+		}
+	});
 	
 	messages
 		.map(item => item.message.date)
