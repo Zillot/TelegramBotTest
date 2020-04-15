@@ -521,8 +521,8 @@ function LoadSetups() {
 	});
 	
 	posibleOrders = userSteps.concat([
-		{ text: setupsData.helloText, orderNum: 1, posibleAnsvers: ['/start'] },
 		{ text: setupsData.successText, orderNum: 6, posibleAnsvers: [] },
+		{ text: setupsData.helloText, orderNum: 7, posibleAnsvers: ['/start'] },
 		{ text: setupsData.questionForAdminRights, orderNum: 102, posibleAnsvers: [], command: 'Rights' },
 		{ text: setupsData.questionForAdminSetups, orderNum: 101, posibleAnsvers: [], command: 'Setups' },
 		{ text: setupsData.questionForAdminStep1, orderNum: 100, posibleAnsvers: ButtonsToList(buttonsForAdmin), command: '/admin' }
