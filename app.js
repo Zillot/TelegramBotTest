@@ -84,6 +84,7 @@ function PoccessMessage(chat) {
 			chatName: null,
 			id: chat.id,
 			data: {},
+			prevOrder: null,
 			lastOrder: null,
 		};
 		chatResults.push(chatResult);
@@ -332,20 +333,18 @@ function GoToOrder(lastUserMessage, chat, chatResult, stepNum) {
 }
 
 function CheckStepResult(lastUserMessage, chat, chatResult) {
-	console.log("check step --------------");
-	console.log(chatResult);
-	console.log(chatResult.lastOrder.posibleAnsvers.length > 0);
-	console.log(!chatResult.lastOrder.posibleAnsvers.find(x => x == lastUserMessage.message.text));
-	console.log("check step --------------");
+	if (chatResult.prevStep == null) {
+		return false;
+	}
 	
-	if (chatResult.lastOrder.posibleAnsvers.length > 0 && !chatResult.lastOrder.posibleAnsvers.find(x => x == lastUserMessage.message.text)) {
+	if (chatResult.prevStep.posibleAnsvers.length > 0 && !chatResult.prevStep.posibleAnsvers.find(x => x == lastUserMessage.message.text)) {
 		ErrorStep(chat);
 		return true;
 	}
 	
-	chatResult.data[chatResult.lastOrder.orderNum] = lastUserMessage.message.text;
+	chatResult.data[chatResult.prevStep.orderNum] = lastUserMessage.message.text;
 	
-	if (chatResult.lastOrder.orderNum == 2) {
+	if (chatResult.prevStep.orderNum == 2) {
 		SaveUserName(chatResult.id, lastUserMessage.message.text);
 	}
 
@@ -359,6 +358,7 @@ function ErrorStep(chat) {
 }
 
 function SetOrderToChat(chat, chatResult, order) {
+	chatResult.prevStep = chatResult.lastOrder;
 	chatResult.lastOrder = order;
 }
 
