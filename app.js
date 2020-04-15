@@ -153,11 +153,6 @@ function PoccessMessage(chat) {
 	}
 	
 	var orderNum = chatResult.lastOrder == null ? 1 : chatResult.lastOrder.orderNum;
-		
-	if (orderNum == setupsData.steps.length + 1) {
-		chatResult.lastOrder = posibleOrders[1];
-		chatResult.data = {};
-	}
 	
 	if (chat.thread.length == 0) {
 		SendMessage(chat.id, setupsData.helloText, (error, response) => {
@@ -227,9 +222,9 @@ function StepDone(lastUserMessage, chat, chatResult) {
 	templatedData = templatedData.replace("USERNAME", `${lastUserMessage.message.from.first_name} ${lastUserMessage.message.from.last_name}`);
 	
 	console.log(templatedData);
-	console.log(chatResult.data);
 	
 	SetOrderToChat(chat, chatResult, null);
+	chatResult.data = {};
 	
 	SendMessage(setupsData.telegramChatIdToPublish, templatedData, (error, response) => {
 		if (error) { errorHandler(error); }
