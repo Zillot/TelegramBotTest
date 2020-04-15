@@ -659,6 +659,8 @@ function GetAllChatNames() {
 				}
 			});
 		}
+		
+		console.log(chatResults);
 	});
 }
 
