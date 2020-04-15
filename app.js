@@ -207,14 +207,15 @@ function StepDone(lastUserMessage, chat, chatResult) {
 	});
 	
 	let templatedData = setupsData.publishResultTemplate + "";
-	templatedData = templatedData.replace("COMPANY", chatResult.chatName);
+	templatedData = templatedData.replace("COMPANY", chatResult.data[1]);
+	templatedData = templatedData.replace("WORK", chatResult.data[2]);
 	templatedData = templatedData.replace("BUILDING", chatResult.data[3]);
 	templatedData = templatedData.replace("PHONE", chatResult.data[4]);
 	templatedData = templatedData.replace("COMMENT", chatResult.data[5]);
 	templatedData = templatedData.replace("USERNAME", `${lastUserMessage.message.from.first_name} ${lastUserMessage.message.from.last_name}`);
 	
 	
-	SaveUserName(chatResult.id, chatResult.chatName, chatResult);
+	SaveUserName(chatResult.id, chatResult.data[1], chatResult);
 	
 	console.log(templatedData);
 	
@@ -516,7 +517,7 @@ function DefaultData() {
 		errorText: 'Будьласка користуйтесь кнопками',
 		noRightsError: 'Вам я на таке не відповім.',
 		
-		publishResultTemplate: 'Нова заявка, COMPANY, USERNAME, PHONE, COMMENT, BUILDING',
+		publishResultTemplate: 'Нова заявка, COMPANY, USERNAME, WORK, PHONE, COMMENT, BUILDING',
 		
 		steps: [
 			{
