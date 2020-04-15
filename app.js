@@ -126,6 +126,11 @@ function PoccessMessage(chat) {
 	
 	if (lastUserMessage != null && lastUserMessage.message.text != null) {
 		order = posibleOrders.find(x => x.command == lastUserMessage.message.text);
+		console.log("DEBUGGER 1");
+		
+		console.log(order);
+		
+		console.log("DEBUGGER 1");
 		if (!order) {
 			order = posibleOrders[0];
 		}
@@ -162,14 +167,14 @@ function PoccessMessage(chat) {
 			if (error) { errorHandler(error); }
 		});
 	}
-
-	if (orderNum < setupsData.steps.length - 1) {	
-		console.log("DEBUGGER");
+		console.log("DEBUGGER 2");
 		
 		console.log(lastUserMessage);
 		console.log(order);
 		
-		console.log("DEBUGGER");
+		console.log("DEBUGGER 2");
+
+	if (orderNum < setupsData.steps.length - 1) {	
 		Step(order, lastUserMessage, chat, chatResult);
 	}
 	else if (orderNum == setupsData.steps.length) {
