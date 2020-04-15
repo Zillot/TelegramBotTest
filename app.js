@@ -126,20 +126,6 @@ function PoccessMessage(chat) {
 	
 	if (lastUserMessage != null && lastUserMessage.message.text != null) {
 		order = posibleOrders.find(x => x.command == lastUserMessage.message.text);
-		console.log("DEBUGGER 1");
-		
-		console.log(order);
-		
-		console.log("DEBUGGER 1");
-		if (order == null || order == undefined) {
-			order = posibleOrders[0];
-		}
-		
-		console.log("DEBUGGER 3");
-		
-		console.log(order);
-		
-		console.log("DEBUGGER 3");
 		
 		if (order != null) {
 			if(!IsAdmin(chat, lastUserMessage)) {
@@ -173,15 +159,13 @@ function PoccessMessage(chat) {
 			if (error) { errorHandler(error); }
 		});
 	}
-		console.log("DEBUGGER 2");
-		
-		console.log(lastUserMessage);
-		console.log(order);
-		
-		console.log("DEBUGGER 2");
+	
+	if (chatResult.lastOrder == null) {
+		chatResult.lastOrder = posibleOrders[0];
+	}
 
 	if (orderNum < setupsData.steps.length - 1) {	
-		Step(order, lastUserMessage, chat, chatResult);
+		Step(lastUserMessage, chat, chatResult);
 	}
 	else if (orderNum == setupsData.steps.length) {
 		StepDone(lastUserMessage, chat, chatResult);
@@ -192,18 +176,18 @@ function PoccessMessage(chat) {
 }
 
 //hello, select flow
-function Step(order, lastUserMessage, chat, chatResult) {	
-	if (order.orderNum == 1 && chatResult.chatName != null) {
-		SetOrderToChat(chat, chatResult, posibleOrders[order.orderNum + 1]);
-		Step(posibleOrders[order.orderNum + 1], lastUserMessage, chat, chatResult);
+function Step(lastUserMessage, chat, chatResult) {	
+	if (chatResult.lastOrder.orderNum == 1 && chatResult.chatName != null) {
+		SetOrderToChat(chat, chatResult, posibleOrders[chatResult.lastOrder.orderNum + 1]);
+		Step(posibleOrders[chatResult.lastOrder.orderNum + 1], lastUserMessage, chat, chatResult);
 		return;
 	}
 
-	if (order.orderNum == 2) {
+	if (chatResult.lastOrder.orderNum == 2) {
 		chatResult.data = {};
 	}
 
-	if (order.orderNum != 2) {
+	if (chatResult.lastOrder.orderNum != 2) {
 		if (CheckStepResult(lastUserMessage, chat, chatResult)) { return; }
 	}
 	
@@ -213,7 +197,7 @@ function Step(order, lastUserMessage, chat, chatResult) {
 		GoToOrder(lastUserMessage, chat, chatResult, override.stepNum);
 		return;
 	}
-	var step = setupsData.steps[order.orderNum - 1];
+	var step = setupsData.steps[chatResult.lastOrder.orderNum - 1];
 	if (step.buttons.length > 0) {
 		SendMessageButtons(chat.id, step.question, step.buttons, (error, response) => {
 			if (error) { errorHandler(error); }
@@ -225,7 +209,7 @@ function Step(order, lastUserMessage, chat, chatResult) {
 		});
 	}
 	
-	SetOrderToChat(chat, chatResult, posibleOrders[order.orderNum + 1]);
+	SetOrderToChat(chat, chatResult, posibleOrders[chatResult.lastOrder.orderNum + 1]);
 }
 
 function StepDone(lastUserMessage, chat, chatResult) {
@@ -325,9 +309,9 @@ function StepAdminRights(lastUserMessage, chat, chatResult) {
 	SetOrderToChat(chat, chatResult, posibleOrders[posibleOrders.length - 3]);
 }
 
-function GoToOrder(order, lastUserMessage, chat, chatResult, stepNum) {
+function GoToOrder(lastUserMessage, chat, chatResult, stepNum) {
 	if (stepNum < setupsData.steps.length - 1) {
-		Step(order, lastUserMessage, chat, chatResult);
+		Step(lastUserMessage, chat, chatResult);
 	}
 	else if (stepNum == setupsData.steps.length) {
 		StepDone(lastUserMessage, chat, chatResult);
