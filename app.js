@@ -118,7 +118,7 @@ function PoccessMessage(chat) {
 	
 	if (lastUserMessage != null && lastUserMessage.message.text != null) {
 		if (lastUserMessage.message.text == '/start') {
-			Step1(chat, chatResult);
+			Step(lastUserMessage, chat, chatResult);
 			return;
 		}
 	}
@@ -225,6 +225,7 @@ function StepDone(lastUserMessage, chat, chatResult) {
 	});
 	
 	var templatedData = setupsData.publishResultTemplate + "";
+	templatedData = templatedData.replace("COMPANY", chatResult.chatName);
 	templatedData = templatedData.replace("BUILDING", chatResult.data[3]);
 	templatedData = templatedData.replace("PHONE", chatResult.data[4]);
 	templatedData = templatedData.replace("COMMENT", chatResult.data[5]);
