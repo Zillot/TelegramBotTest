@@ -604,7 +604,7 @@ function CraetTables() {
 	
 	runSql("CREATE TABLE IF NOT EXISTS adminsetups ( id int, adminId TEXT )", (res) => {});
 	
-	runSql("CREATE TABLE IF NOT EXISTS telegramusers ( id int serial PRIMARY KEY, chatId int, chatName TEXT )", (res) => {});
+	runSql("CREATE TABLE IF NOT EXISTS telegramusers ( id serial PRIMARY KEY, chatId int, chatName TEXT )", (res) => {});
 	
 	setTimeout(() => {
 		runSql("Select * From botsetups", (res) => {
