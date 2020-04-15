@@ -647,5 +647,13 @@ function GetUserName(chatId, chatResult) {
 		if (res != null && res.rows != null && (res.rows.length > 0 || res.rows[0] != null)) {
 			chatResult.chatName = res.rows[0].chatname;
 		}
+		
+		console.log("Loaded ==========================");
+		console.log(res);
+		console.log("Loaded ==========================");
+		console.log(res.rows[0]);
+		console.log("Loaded ==========================");
+		console.log(chatResult);
+		console.log("Loaded ==========================");
 	});
 }
