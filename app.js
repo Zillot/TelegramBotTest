@@ -179,12 +179,18 @@ function PoccessMessage(chat) {
 
 //hello, select flow
 function Step(lastUserMessage, chat, chatResult) {	
+	console.log("enter step ==============");
+	console.log(lastUserMessage);
+	console.log("enter step ==============");
+	console.log(chatResult);
+	console.log("enter step ==============");
+	
 	if (chatResult.lastOrder.orderNum == 1 && chatResult.chatName != null) {
 		SetOrderToChat(chat, chatResult, posibleOrders[chatResult.lastOrder.orderNum]);
 		Step(lastUserMessage, chat, chatResult);
 		return;
 	}
-
+	
 	if (CheckStepResult(lastUserMessage, chat, chatResult)) { return; }
 
 	let text = lastUserMessage.message.text;
@@ -204,6 +210,12 @@ function Step(lastUserMessage, chat, chatResult) {
 			if (error) { errorHandler(error); }
 		});
 	}
+	
+	console.log("leaving step ==============");
+	console.log(lastUserMessage);
+	console.log("leaving step ==============");
+	console.log(chatResult);
+	console.log("leaving step ==============");
 	
 	SetOrderToChat(chat, chatResult, posibleOrders[chatResult.lastOrder.orderNum]);
 }
