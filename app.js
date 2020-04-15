@@ -152,7 +152,7 @@ function PoccessMessage(chat) {
 	
 	var orderNum = chatResult.lastOrder == null ? 1 : chatResult.lastOrder.orderNum;
 	
-	if (chat.thread.length == 0) {
+	if (chatResult.chatName == null) {
 		SendMessage(chat.id, setupsData.helloText, (error, response) => {
 			if (error) { errorHandler(error); }
 		});
@@ -178,7 +178,7 @@ function PoccessMessage(chat) {
 function Step(lastUserMessage, chat, chatResult) {		
 	if (chatResult.lastOrder.orderNum == 1 && chatResult.chatName != null) {
 		SetOrderToChat(chat, chatResult, posibleOrders[chatResult.lastOrder.orderNum]);
-		Step(lastUserMessage, chat, chatResult);
+		PoccessMessage(chat);
 		return;
 	}
 	
