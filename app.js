@@ -650,10 +650,10 @@ function SaveUserName(chatId, name, chatResult) {
 }
 
 function GetUserName(chatId, chatResult) {
-	runSql(`Select * From botsetups Where userId = ${chatId}`, (res) => {
+	runSql(`Select * From users Where userId = ${chatId}`, (res) => {
 		chatResult.userId = chatId;
 		
-		if (res.rows && res.rows.length > 0) {
+		if (res && res.rows && res.rows.length > 0) {
 			chatResult.chatName = res.rows[0].name;
 		}
 	});
