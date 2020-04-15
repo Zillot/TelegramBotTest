@@ -4,31 +4,26 @@ const path = require('path')
 const request = require('request');
 
 const {Pool, Client} = require('pg');
-const conString = 'postgres://bysidpvwnrioco:7b9d068106d53fe2dabffe7dd714fc8a902ed8d9b2f1a4f106c8756bb27eb0f4@ec2-54-217-204-34.eu-west-1.compute.amazonaws.com:5432/d2ein0u2eht31k';
+
+// ======= CHANGE BEFORE USE START
+const defaultDBCOnnection = {
+	user: "bysidpvwnrioco",
+	host: "ec2-54-217-204-34.eu-west-1.compute.amazonaws.com",
+	database: "d2ein0u2eht31k",
+	password: "7b9d068106d53fe2dabffe7dd714fc8a902ed8d9b2f1a4f106c8756bb27eb0f4",
+	port: 5432
+};
+		
+const defaultTelegramBotToken = 'bot1268644831:AAG9mllT8DhDqz1uaD4yUt2k4_Vk6-hlqhk';
+const defaultTelegramChatIdToPublish = -458746802;
+const defaultAdminId = 267835012;
+// ======= CHANGE BEFORE USE END
 
 const PORT = process.env.PORT || 5000
 
 let lastProcessDate = 0;
 
-let setupsData = {
-	helloText: '',
-	errorText: '',
-	successText: '',
-	noRightsError: '',
-	
-	publishResultTemplate: '',
-	
-	questionForStep1: '',
-	buttonsForStep1: [],
-	questionForStep2: '',
-	buttonsForStep2: [],
-	questionForStep3: '',
-	questionForStep4: '',
-	
-	telegramBotToken: '',
-	telegramChatIdToPublish: -458746802,
-	ignoreChatId: 123,
-}
+let setupsData = {}
 	
 let adminId;
 
@@ -81,6 +76,7 @@ function PoccessMessage(chat) {
 	var chatResult = chatResults.find(x => x.id == chat.id);
 	if (chatResult == null) {
 		chatResult = {
+			userId: null,
 			id: chat.id,
 			data: null,
 			lastOrder: null,
@@ -109,7 +105,7 @@ function PoccessMessage(chat) {
 		return;
 	}
 	
-	if (chat.id == setupsData.ignoreChatId) {		
+	if (chat.id == setupsData.telegramChatIdToPublish) {		
 		return;
 	}
 	
@@ -120,8 +116,10 @@ function PoccessMessage(chat) {
 		}
 	}
 	
+	let order = null;
+	
 	if (lastUserMessage != null && lastUserMessage.message.text != null) {
-		var order = posibleOrders.find(x => x.command == lastUserMessage.message.text);
+		order = posibleOrders.find(x => x.command == lastUserMessage.message.text);
 		
 		if (order != null) {
 			if(!IsAdmin(chat, lastUserMessage)) {
@@ -144,19 +142,22 @@ function PoccessMessage(chat) {
 		CheckAdminStep(chat, chatResult, chatResult.lastOrder.orderNum, lastUserMessage);
 	}
 	
-	if ((chatResult.lastOrder == null || chatResult.lastOrder.orderNum == 1 || chatResult.lastOrder.orderNum == 6)) {
-		Step1(chat, chatResult);
+	var orderNum = chatResult.lastOrder == null ? 1 : chatResult.lastOrder.orderNum;
+	
+	if (orderNum == setupsData.steps.length) {
+		orderNum = 2;
 	}
-	else if (chatResult.lastOrder.orderNum == 2) {
-		Step2(lastUserMessage, chat, chatResult);
+	
+	if (chat.thread.length == 0) {
+		SendMessage(chat.id, setupsData.helloText, (error, response) => {
+			if (error) { errorHandler(error); }
+		});
 	}
-	else if (chatResult.lastOrder.orderNum == 3) {
-		Step3(lastUserMessage, chat, chatResult)
+	
+	if (orderNum < setupsData.steps.length - 1) {
+		Step(order, lastUserMessage, chat, chatResult);
 	}
-	else if (chatResult.lastOrder.orderNum == 4) {
-		Step4(lastUserMessage, chat, chatResult);
-	}
-	else if (chatResult.lastOrder.orderNum == 5) {
+	else if (orderNum == setupsData.steps.length) {
 		StepDone(lastUserMessage, chat, chatResult);
 	}
 	else if (chatResult.lastOrder.orderNum == 100) {
@@ -165,24 +166,14 @@ function PoccessMessage(chat) {
 }
 
 //hello, select flow
-function Step1(chat, chatResult) {
-	if (chat.thread.length == 0) {
-		SendMessage(chat.id, setupsData.helloText, (error, response) => {
-			if (error) { errorHandler(error); }
-		});
+function Step(order, lastUserMessage, chat, chatResult) {	
+	if (order.orderNum == 1) {
+		//TODO
 	}
-	
-	SendMessageButtons(chat.id, setupsData.questionForStep1, setupsData.buttonsForStep1, (error, response) => {
-		if (error) { errorHandler(error); }
-	});
-	
-	chatResult.data = {};
-	SetOrderToChat(chat, chatResult, posibleOrders[1]);
-}
 
-//select building
-function Step2(lastUserMessage, chat, chatResult) {
-	if (CheckStepResult(lastUserMessage, chat, chatResult)) { return; }
+	if (order.orderNum != 2) {
+		if (CheckStepResult(lastUserMessage, chat, chatResult)) { return; }
+	}
 	
 	let text = lastUserMessage.message.text;
 	let override = setupsData.navigationMapOverride.find(x => x.btnText == text);
@@ -191,33 +182,22 @@ function Step2(lastUserMessage, chat, chatResult) {
 		return;
 	}
 	
-	SendMessageButtons(chat.id, setupsData.questionForStep2, setupsData.buttonsForStep2, (error, response) => {
-		if (error) { errorHandler(error); }
-	});
+	if (setupsData.steps[order.orderNum].buttons.length > 0) {
+		SendMessageButtons(chat.id, setupsData.steps[order.orderNum].question, setupsData.steps[order.orderNum].buttons, (error, response) => {
+			if (error) { errorHandler(error); }
+		});
+	}
+	else {
+		SendMessage(chat.id, setupsData.steps[order.orderNum].question, (error, response) => {
+			if (error) { errorHandler(error); }
+		});
+	}
 	
-	SetOrderToChat(chat, chatResult, posibleOrders[2]);
-}
-
-//enter phone
-function Step3(lastUserMessage, chat, chatResult) {
-	if (CheckStepResult(lastUserMessage, chat, chatResult)) { return; }
+	if (order.orderNum == 2) {
+		chatResult.data = {};
+	}
 	
-	SendMessage(chat.id, setupsData.questionForStep3, (error, response) => {
-		if (error) { errorHandler(error); }
-	});
-	
-	SetOrderToChat(chat, chatResult, posibleOrders[3]);
-}
-
-//enter comment
-function Step4(lastUserMessage, chat, chatResult) {
-	if (CheckStepResult(lastUserMessage, chat, chatResult)) { return; }
-	
-	SendMessage(chat.id, setupsData.questionForStep4, (error, response) => {
-		if (error) { errorHandler(error); }
-	});
-	
-	SetOrderToChat(chat, chatResult, posibleOrders[4]);
+	SetOrderToChat(chat, chatResult, posibleOrders[order.orderNum]);
 }
 
 function StepDone(lastUserMessage, chat, chatResult) {
@@ -513,21 +493,27 @@ function errorHandler(error) {
 function LoadSetups() {		
 	buttonsForAdmin = [["Rights"], ["Setups"]];
 	
-	posibleOrders = [
+	let userSteps = [];
+	let stepIndex = 1;
+	setupsData.steps.forEach(step => {
+		userSteps.push({
+			orderNum: stepIndex++,
+			text: step.question,  
+			posibleAnsvers: ButtonsToList(step.buttons)
+		})
+	});
+	
+	posibleOrders = userSteps.concat([
 		{ text: setupsData.helloText, orderNum: 1, posibleAnsvers: ['/start'] },
-		{ text: setupsData.questionForStep1, orderNum: 2, posibleAnsvers: ButtonsToList(setupsData.buttonsForStep1) },
-		{ text: setupsData.questionForStep2, orderNum: 3, posibleAnsvers: ButtonsToList(setupsData.buttonsForStep2) },
-		{ text: setupsData.questionForStep3, orderNum: 4, posibleAnsvers: [] },
-		{ text: setupsData.questionForStep4, orderNum: 5, posibleAnsvers: [] },
 		{ text: setupsData.successText, orderNum: 6, posibleAnsvers: [] },
 		{ text: setupsData.questionForAdminRights, orderNum: 102, posibleAnsvers: [], command: 'Rights' },
 		{ text: setupsData.questionForAdminSetups, orderNum: 101, posibleAnsvers: [], command: 'Setups' },
-		{ text: setupsData.questionForAdminStep1, orderNum: 100, posibleAnsvers: ButtonsToList(buttonsForAdmin), command: '/admin' },
-	];
+		{ text: setupsData.questionForAdminStep1, orderNum: 100, posibleAnsvers: ButtonsToList(buttonsForAdmin), command: '/admin' }
+	])
 }
 
 function DefaultData() {
-	adminId = 267835012;
+	adminId = defaultAdminId;
 	
 	setupsData = {
 		successText: 'Інформацію отримано. Напиши мені сюди щось щоб створити нову заявку',
@@ -537,27 +523,39 @@ function DefaultData() {
 		
 		publishResultTemplate: 'Нова заявка, USERNAME, PHONE, COMMENT, BUILDING',
 		
-		questionForStep1: "Кого викликати?",
-		buttonsForStep1: [["Електрика", "Сантехніка"], ["Бухгалтерія", "Інші роботи"]],
+		steps: [
+			{
+				question: "Назва компанії",
+				buttons: []
+			},
+			{
+				question: "Кого викликати?",
+				buttons: [["Електрика", "Сантехніка"], ["Бухгалтерія", "Інші роботи"]]
+			},
+			{
+				question: "Номер підїзду",
+				buttons: [["1", "2", "3"], ["4", "5", "6"], ["7"]]
+			},
+			{
+				question: "Номер телефону",
+				buttons: []
+			},
+			{
+				question: "Коментар",
+				buttons: []
+			}
+		],
 		
-		questionForStep2: "Номер підїзду",
-		buttonsForStep2: [["1", "2", "3"], ["4", "5", "6"], ["7"]],
-		
-		questionForStep3: "Номер телефону",
-		
-		questionForStep4: "Коментар",
-		
-		telegramBotToken: 'bot1268644831:AAG9mllT8DhDqz1uaD4yUt2k4_Vk6-hlqhk',
+		telegramBotToken: defaultTelegramBotToken,
 		
 		navigationMapOverride: [
-			{ btnText: "Бухгалтерія", stepNum: 3 }
+			{ btnText: "Бухгалтерія", stepNum: 4 }
 		],
 		
 		questionForAdminStep1: 'Що треба змінити?',
 		questionForAdminSetups: 'Мені потрібен JSON з налаштуваннями, ось поточній, напиши /admin для відміни',
 		questionForAdminRights: 'Кому передаті права? Напиши Id користувача.',
-		telegramChatIdToPublish: -458746802,
-		ignoreChatId: 123
+		telegramChatIdToPublish: defaultTelegramChatIdToPublish
 	}
 }
 
@@ -577,13 +575,7 @@ function ButtonsToList(buttonsLines) {
 }
 
 function runSql(script, callback) {
-	let pool = new Pool({
-		user: "bysidpvwnrioco",
-		host: "ec2-54-217-204-34.eu-west-1.compute.amazonaws.com",
-		database: "d2ein0u2eht31k",
-		password: "7b9d068106d53fe2dabffe7dd714fc8a902ed8d9b2f1a4f106c8756bb27eb0f4",
-		port: 5432
-	});
+	let pool = new Pool(defaultDBCOnnection);
 
 	pool.query(script, (err, res) => {
 		callback(res);
@@ -600,6 +592,8 @@ function CraetTables() {
 	runSql("CREATE TABLE IF NOT EXISTS botsetups ( id int, json TEXT )", (res) => {});
 	
 	runSql("CREATE TABLE IF NOT EXISTS adminsetups ( id int, adminId TEXT )", (res) => {});
+	
+	runSql("CREATE TABLE IF NOT EXISTS users ( id int SERIAL, userId int, name TEXT )", (res) => {});
 	
 	setTimeout(() => {
 		runSql("Select * From botsetups", (res) => {
@@ -635,4 +629,15 @@ function ConfirmSetupsSave() {
 	runSql(`UPDATE public.botsetups SET json=${json} WHERE id=1;`, (res) => {});
 	
 	runSql(`UPDATE public.adminsetups SET adminid=${adminId} WHERE id=1;`, (res) => {});
+}
+
+function SaveUserName(userId, name) {
+	runSql(`INSERT INTO public.users(userId, name) VALUES (${userId}, '${name}')`, (res) => {});
+}
+
+function GetUserName(userId, chatResult) {
+	runSql(`Select * From botsetups Where userId = ${userId}`, (res) => {
+		var chatResult = chatResults.find(x => x.id == chat.id);
+		chatResult.userId = userId;
+	});
 }
