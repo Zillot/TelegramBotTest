@@ -320,10 +320,10 @@ function StepAdminRights(lastUserMessage, chat, chatResult) {
 }
 
 function GoToOrder(order, lastUserMessage, chat, chatResult, stepNum) {
-	if (orderNum < setupsData.steps.length - 1) {
+	if (stepNum < setupsData.steps.length - 1) {
 		Step(order, lastUserMessage, chat, chatResult);
 	}
-	else if (orderNum == setupsData.steps.length) {
+	else if (stepNum == setupsData.steps.length) {
 		StepDone(lastUserMessage, chat, chatResult);
 	}
 	else if (stepNum == 100) {
