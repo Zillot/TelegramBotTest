@@ -627,7 +627,7 @@ function ConfirmSetupsSave() {
 function SaveUserName(chatId, name, chatResult) {
 	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {	
 console.log(res);	
-		if (res != null && res.rows == null || (res.rows.length == 0)) {
+		if (!res.rows || res.rows.length == 0) {
 			runSql(`INSERT INTO public.telegramusers(chatId, chatName) VALUES (${chatId}, '${name}')`, (res) => {
 				chatResult.chatId = chatId;
 				chatResult.chatName = name;
