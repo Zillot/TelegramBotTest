@@ -324,6 +324,15 @@ function GoToOrder(lastUserMessage, chat, chatResult, stepNum) {
 }
 
 function CheckStepResult(lastUserMessage, chat, chatResult) {
+	console.log("check step --------------");
+	console.log(lastUserMessage);
+	console.log("check step --------------");
+	console.log(chatResult);
+	console.log("check step --------------");
+	console.log(chatResult.lastOrder.posibleAnsvers.length > 0);
+	console.log(!chatResult.lastOrder.posibleAnsvers.find(x => x == lastUserMessage.message.text));
+	console.log("check step --------------");
+	
 	if (chatResult.lastOrder.posibleAnsvers.length > 0 && !chatResult.lastOrder.posibleAnsvers.find(x => x == lastUserMessage.message.text)) {
 		ErrorStep(chat);
 		return true;
