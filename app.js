@@ -181,7 +181,7 @@ function PoccessMessage(chat) {
 function Step(lastUserMessage, chat, chatResult) {	
 	if (chatResult.lastOrder.orderNum == 1 && chatResult.chatName != null) {
 		SetOrderToChat(chat, chatResult, posibleOrders[chatResult.lastOrder.orderNum]);
-		Step(posibleOrders[chatResult.lastOrder.orderNum + 1], lastUserMessage, chat, chatResult);
+		Step(lastUserMessage, chat, chatResult);
 		return;
 	}
 
