@@ -636,13 +636,13 @@ function GetAllChatNames() {
 	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {		
 		if (res != null && res.rows != null && (res.rows.length > 0 || res.rows[0] != null)) {
 			res.rows.forEach(row => {
-				let chatResult = chatResults.find(x => x.id == chat.id);
+				let chatResult = chatResults.find(x => x.id == row.chatid);
 				if (chatResult != null) {
 					chatResult.chatName = row.chatname
 				}
 				else {
 					let chatResultNew = {
-						chatId: null,
+						chatId: row.chatid,
 						chatName: null,
 						id: chat.id,
 						data: {},
