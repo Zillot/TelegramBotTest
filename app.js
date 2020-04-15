@@ -151,7 +151,8 @@ function PoccessMessage(chat) {
 	var orderNum = chatResult.lastOrder == null ? 1 : chatResult.lastOrder.orderNum;
 	
 	if (orderNum == setupsData.steps.length) {
-		orderNum = 2;
+		chatResult.lastOrder = posibleOrders[2];
+		chatResult.data = {};
 	}
 	
 	if (chat.thread.length == 0) {
@@ -162,6 +163,7 @@ function PoccessMessage(chat) {
 	
 	if (chatResult.lastOrder == null) {
 		chatResult.lastOrder = posibleOrders[0];
+		chatResult.data = {};
 	}
 
 	if (orderNum < setupsData.steps.length - 1) {	
@@ -181,10 +183,6 @@ function Step(lastUserMessage, chat, chatResult) {
 		SetOrderToChat(chat, chatResult, posibleOrders[chatResult.lastOrder.orderNum + 1]);
 		Step(posibleOrders[chatResult.lastOrder.orderNum + 1], lastUserMessage, chat, chatResult);
 		return;
-	}
-
-	if (chatResult.lastOrder.orderNum == 2) {
-		chatResult.data = {};
 	}
 
 	if (CheckStepResult(lastUserMessage, chat, chatResult)) { return; }
