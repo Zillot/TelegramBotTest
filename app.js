@@ -104,10 +104,10 @@ function PoccessMessage(chat) {
 		return;
 	}
 	
-	console.log("debugger ============");
+	console.log("debugger 1============");
 	console.log(chatResult);
 	console.log(lastUserMessage);
-	console.log("debugger ============");
+	console.log("debugger 1============");
 	if (lastUserMessage != null && lastUserMessage.message.text == '/getmyid') {
 		SendMessage(chat.id, lastUserMessage.message.from.id, (error, response) => {
 			if (error) { errorHandler(error); }
@@ -130,10 +130,10 @@ function PoccessMessage(chat) {
 		}
 	}
 	
-	console.log("debugger ============");
+	console.log("debugger 2============");
 	console.log(chatResult);
 	console.log(lastUserMessage);
-	console.log("debugger ============");
+	console.log("debugger 2============");
 	let order = null;
 	
 	if (lastUserMessage != null && lastUserMessage.message.text != null) {
@@ -151,10 +151,10 @@ function PoccessMessage(chat) {
 		}
 	}
 	
-	console.log("debugger ============");
+	console.log("debugger 3============");
 	console.log(chatResult);
 	console.log(lastUserMessage);
-	console.log("debugger ============");
+	console.log("debugger 3============");
 	if (chatResult.lastOrder && chatResult.lastOrder.orderNum >= 100) {
 		if(!IsAdmin(chat, lastUserMessage)) {
 			chatResult.lastOrder = null;
@@ -168,10 +168,10 @@ function PoccessMessage(chat) {
 	
 	var orderNum = chatResult.lastOrder == null ? 1 : chatResult.lastOrder.orderNum;
 	
-	console.log("debugger ============");
+	console.log("debugger 4============");
 	console.log(chatResult);
 	console.log(lastUserMessage);
-	console.log("debugger ============");
+	console.log("debugger 4============");
 	if (orderNum == setupsData.steps.length) {
 		chatResult.lastOrder = posibleOrders[2];
 		chatResult.data = {};
@@ -183,19 +183,19 @@ function PoccessMessage(chat) {
 		});
 	}
 	
-	console.log("debugger ============");
+	console.log("debugger 5============");
 	console.log(chatResult);
 	console.log(lastUserMessage);
-	console.log("debugger ============");
+	console.log("debugger 5============");
 	if (chatResult.lastOrder == null) {
 		chatResult.lastOrder = posibleOrders[0];
 		chatResult.data = {};
 	}
 	
-	console.log("debugger ============");
+	console.log("debugger 6============");
 	console.log(chatResult);
 	console.log(lastUserMessage);
-	console.log("debugger ============");
+	console.log("debugger 6============");
 	
 
 	if (orderNum < setupsData.steps.length - 1) {	
