@@ -330,6 +330,7 @@ function CheckStepResult(lastUserMessage, chat, chatResult) {
 		return true;
 	}
 	
+	console.log(chatResult)
 	chatResult.data[chatResult.lastOrder.orderNum] = lastUserMessage.message.text;
 
 	return false;
