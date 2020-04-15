@@ -206,8 +206,12 @@ function StepDone(lastUserMessage, chat, chatResult) {
 		if (error) { errorHandler(error); }
 	});
 	
+	if (chatResult.chatName == null) {
+		chatResult.chatName = chatResult.data[1];
+	}
+	
 	let templatedData = setupsData.publishResultTemplate + "";
-	templatedData = templatedData.replace("COMPANY", chatResult.data[1]);
+	templatedData = templatedData.replace("COMPANY", chatResult.chatName);
 	templatedData = templatedData.replace("WORK", chatResult.data[2]);
 	templatedData = templatedData.replace("BUILDING", chatResult.data[3]);
 	templatedData = templatedData.replace("PHONE", chatResult.data[4]);
@@ -215,7 +219,7 @@ function StepDone(lastUserMessage, chat, chatResult) {
 	templatedData = templatedData.replace("USERNAME", `${lastUserMessage.message.from.first_name} ${lastUserMessage.message.from.last_name}`);
 	
 	
-	SaveUserName(chatResult.id, chatResult.data[1], chatResult);
+	SaveUserName(chatResult.id, chatResult.chatName, chatResult);
 	
 	console.log(templatedData);
 	
