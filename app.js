@@ -643,10 +643,6 @@ function SaveUserName(chatId, name, chatResult) {
 	runSql(`INSERT INTO public.telegramusers(chatId, chatName) VALUES (${chatId}, '${name}')`, (res) => {
 		chatResult.chatId = chatId;
 		chatResult.chatName = name;
-		console.log("saved =============");
-		console.log(chatResult);
-		console.log(res);
-		console.log("saved =============");
 	});
 }
 
