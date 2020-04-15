@@ -227,6 +227,7 @@ function StepDone(lastUserMessage, chat, chatResult) {
 	templatedData = templatedData.replace("USERNAME", `${lastUserMessage.message.from.first_name} ${lastUserMessage.message.from.last_name}`);
 	
 	console.log(templatedData);
+	console.log(chatResult.data);
 	
 	SetOrderToChat(chat, chatResult, null);
 	
