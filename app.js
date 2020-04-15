@@ -340,7 +340,6 @@ function ErrorStep(chat) {
 	});
 }
 
-
 function SetOrderToChat(chat, chatResult, order) {
 	chatResult.lastOrder = order;
 }
