@@ -163,6 +163,7 @@ function PoccessMessage(chat) {
 			order = posibleOrders[0];
 		}
 		
+		concole.log(order);
 		SetOrderToChat(chat, chatResult, order);
 		Step(order, lastUserMessage, chat, chatResult);
 	}
