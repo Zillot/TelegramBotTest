@@ -180,7 +180,7 @@ function PoccessMessage(chat) {
 //hello, select flow
 function Step(lastUserMessage, chat, chatResult) {	
 	if (chatResult.lastOrder.orderNum == 1 && chatResult.chatName != null) {
-		SetOrderToChat(chat, chatResult, posibleOrders[chatResult.lastOrder.orderNum + 1]);
+		SetOrderToChat(chat, chatResult, posibleOrders[chatResult.lastOrder.orderNum]);
 		Step(posibleOrders[chatResult.lastOrder.orderNum + 1], lastUserMessage, chat, chatResult);
 		return;
 	}
@@ -205,7 +205,7 @@ function Step(lastUserMessage, chat, chatResult) {
 		});
 	}
 	
-	SetOrderToChat(chat, chatResult, posibleOrders[chatResult.lastOrder.orderNum + 1]);
+	SetOrderToChat(chat, chatResult, posibleOrders[chatResult.lastOrder.orderNum]);
 }
 
 function StepDone(lastUserMessage, chat, chatResult) {
