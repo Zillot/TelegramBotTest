@@ -635,14 +635,14 @@ function ConfirmSetupsSave() {
 	runSql(`UPDATE public.adminsetups SET adminid=${adminId} WHERE id=1;`, (res) => {});
 }
 
-function SaveUserName(userId, name, chatResult) {
-	runSql(`INSERT INTO public.users(userId, name) VALUES (${userId}, '${name}')`, (res) => {
-		chatResult.userId = userId;
+function SaveUserName(chatId, name, chatResult) {
+	runSql(`INSERT INTO public.users(userId, name) VALUES (${chatId}, '${name}')`, (res) => {
+		chatResult.userId = chatId;
 	});
 }
 
 function GetUserName(chatId, chatResult) {
 	runSql(`Select * From botsetups Where userId = ${chatId}`, (res) => {
-		chatResult.userId = userId;
+		chatResult.userId = chatId;
 	});
 }
