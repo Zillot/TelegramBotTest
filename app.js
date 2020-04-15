@@ -345,7 +345,7 @@ function CheckStepResult(lastUserMessage, chat, chatResult) {
 	chatResult.data[chatResult.prevStep.orderNum] = lastUserMessage.message.text;
 	
 	if (chatResult.prevStep.orderNum == 2) {
-		SaveUserName(chatResult.id, lastUserMessage.message.text);
+		SaveUserName(chatResult.id, lastUserMessage.message.text, chatResult);
 	}
 
 	return false;
