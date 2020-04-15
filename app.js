@@ -358,6 +358,9 @@ function ErrorStep(chat) {
 }
 
 function SetOrderToChat(chat, chatResult, order) {
+	console.log("SetOrderToChat");
+	console.log(chatResult);
+	
 	chatResult.prevOrder = chatResult.lastOrder;
 	chatResult.lastOrder = order;
 }
