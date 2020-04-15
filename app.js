@@ -187,10 +187,8 @@ function Step(lastUserMessage, chat, chatResult) {
 		chatResult.data = {};
 	}
 
-	if (chatResult.lastOrder.orderNum != 2) {
-		if (CheckStepResult(lastUserMessage, chat, chatResult)) { return; }
-	}
-	
+	if (CheckStepResult(lastUserMessage, chat, chatResult)) { return; }
+
 	let text = lastUserMessage.message.text;
 	let override = setupsData.navigationMapOverride.find(x => x.btnText == text);
 	if (override != null) {
@@ -567,7 +565,6 @@ function DefaultData() {
 
 function ButtonsToList(buttonsLines) {
 	let buttons = [];
-	let buttonsLinesFix = [];
 	
 	buttonsLines.forEach(line => {
 		line.forEach(button => {
