@@ -186,7 +186,8 @@ function PoccessMessage(chat) {
 //hello, select flow
 function Step(order, lastUserMessage, chat, chatResult) {	
 	if (order.orderNum == 1 && chatResult.chatName != null) {
-		Step(order = posibleOrders[1], lastUserMessage, chat, chatResult);
+		SetOrderToChat(chat, chatResult, posibleOrders[order.orderNum + 1]);
+		Step(posibleOrders[order.orderNum + 1], lastUserMessage, chat, chatResult);
 		return;
 	}
 
