@@ -131,9 +131,15 @@ function PoccessMessage(chat) {
 		console.log(order);
 		
 		console.log("DEBUGGER 1");
-		if (!order) {
+		if (order == null || order == undefined) {
 			order = posibleOrders[0];
 		}
+		
+		console.log("DEBUGGER 3");
+		
+		console.log(order);
+		
+		console.log("DEBUGGER 3");
 		
 		if (order != null) {
 			if(!IsAdmin(chat, lastUserMessage)) {
