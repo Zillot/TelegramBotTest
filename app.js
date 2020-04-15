@@ -207,14 +207,14 @@ function Step(order, lastUserMessage, chat, chatResult) {
 		GoToOrder(lastUserMessage, chat, chatResult, override.stepNum);
 		return;
 	}
-	
-	if (setupsData.steps[order.orderNum].buttons.length > 0) {
-		SendMessageButtons(chat.id, setupsData.steps[order.orderNum].question, setupsData.steps[order.orderNum].buttons, (error, response) => {
+	var step = setupsData.steps[order.orderNum - 1];
+	if (step.buttons.length > 0) {
+		SendMessageButtons(chat.id, step.question, step.buttons, (error, response) => {
 			if (error) { errorHandler(error); }
 		});
 	}
 	else {
-		SendMessage(chat.id, setupsData.steps[order.orderNum].question, (error, response) => {
+		SendMessage(chat.id, step.question, (error, response) => {
 			if (error) { errorHandler(error); }
 		});
 	}
