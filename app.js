@@ -22,20 +22,20 @@ const defaultServerUrl = 'https://telegram-bot-test-by-mykola.herokuapp.com'
 
 const PORT = process.env.PORT || 5000
 
-let lastProcessDate = 0;
+var lastProcessDate = 0;
 
-let setupsData = {}
+var setupsData = {}
 	
-let adminId;
+var adminId;
 
-let buttonsForAdmin = [];
-let questionForAdmin = '';
+var buttonsForAdmin = [];
+var questionForAdmin = '';
 
-let posibleOrders = [];
+var posibleOrders = [];
 
-let chatResults = [];
+var chatResults = [];
 
-let globalMessages = [];
+var globalMessages = [];
 
 express()
 	.use(express.json())
@@ -48,7 +48,7 @@ express()
 		responcer.send("success");
 	})
 	.post('/SetWebHooks', (requester, responcer) => {
-		var message = requester.body;
+		let message = requester.body;
 		
 		Loop([message]);
 		
@@ -71,13 +71,13 @@ function Loop(newMessages) {
 	let updatedChatIds = GetChatIdsWithUpdates(newMessages);
 	
 	updatedChatIds.forEach(updatedChatId => {			
-		var chat = chats.find(x => x.id == updatedChatId)
+		let chat = chats.find(x => x.id == updatedChatId)
 		PoccessMessage(chat);
 	});
 }
 
 function PoccessMessage(chat) {
-	var chatResult = chatResults.find(x => x.id == chat.id);
+	let chatResult = chatResults.find(x => x.id == chat.id);
 	if (chatResult == null) {
 		chatResult = {
 			chatId: null,
@@ -150,7 +150,7 @@ function PoccessMessage(chat) {
 		CheckAdminStep(chat, chatResult, chatResult.lastOrder.orderNum, lastUserMessage);
 	}
 	
-	var orderNum = chatResult.lastOrder == null ? 1 : chatResult.lastOrder.orderNum;
+	let orderNum = chatResult.lastOrder == null ? 1 : chatResult.lastOrder.orderNum;
 	
 	if (chatResult.chatName == null) {
 		SendMessage(chat.id, setupsData.helloText, (error, response) => {
@@ -192,7 +192,7 @@ function Step(lastUserMessage, chat, chatResult) {
 		GoToOrder(lastUserMessage, chat, chatResult, override.stepNum);
 		return;
 	}
-	var step = setupsData.steps[chatResult.lastOrder.orderNum - 1];
+	let step = setupsData.steps[chatResult.lastOrder.orderNum - 1];
 	if (step.buttons.length > 0) {
 		SendMessageButtons(chat.id, step.question, step.buttons, (error, response) => {
 			if (error) { errorHandler(error); }
@@ -214,7 +214,7 @@ function StepDone(lastUserMessage, chat, chatResult) {
 		if (error) { errorHandler(error); }
 	});
 	
-	var templatedData = setupsData.publishResultTemplate + "";
+	let templatedData = setupsData.publishResultTemplate + "";
 	templatedData = templatedData.replace("COMPANY", chatResult.chatName);
 	templatedData = templatedData.replace("BUILDING", chatResult.data[3]);
 	templatedData = templatedData.replace("PHONE", chatResult.data[4]);
@@ -232,7 +232,7 @@ function StepDone(lastUserMessage, chat, chatResult) {
 }
 
 function IsAdmin(chat, lastUserMessage) {
-	var rights = lastUserMessage.message.from.id == adminId;
+	let rights = lastUserMessage.message.from.id == adminId;
 	
 	return rights;
 }
@@ -355,7 +355,7 @@ function SetOrderToChat(chat, chatResult, order) {
 }
 
 function GetChatIdsWithUpdates(messages) {
-	var chatIds = [];
+	let chatIds = [];
 	
 	messages.forEach(item => {		
 		if (item.message.date > lastProcessDate) {
@@ -404,7 +404,7 @@ function GetMessagesByChat(messages) {
 
 //======= API CALLS =======
 function CheckUpdates(offset, callback) {
-	var url = `https://api.telegram.org/${setupsData.telegramBotToken}/getUpdates?offset=${offset}`;
+	let url = `https://api.telegram.org/${setupsData.telegramBotToken}/getUpdates?offset=${offset}`;
 	
 	setTimeout(() => {
 		request(url, { json: true }, (error, res, body) => {
@@ -420,7 +420,7 @@ function CheckUpdates(offset, callback) {
 function SendWebhook(hookUrl, callback) {
 	hookUrl = GetTextLineForUrl(hookUrl);
 	
-	var url = `https://api.telegram.org/${setupsData.telegramBotToken}/setWebhook?url=${hookUrl}&max_connections=10`;
+	let url = `https://api.telegram.org/${setupsData.telegramBotToken}/setWebhook?url=${hookUrl}&max_connections=10`;
 	
 	setTimeout(() => {
 		request({ url: url, method: 'POST', json: true }, (error, res, body) => {
@@ -436,7 +436,7 @@ function SendWebhook(hookUrl, callback) {
 function SendMessage(chat_id, text, callback) {
 	text = GetTextLineForUrl(text);
 	
-	var url = `https://api.telegram.org/${setupsData.telegramBotToken}/sendMessage?chat_id=${chat_id}&text=${text}`;
+	let url = `https://api.telegram.org/${setupsData.telegramBotToken}/sendMessage?chat_id=${chat_id}&text=${text}`;
 	
 	setTimeout(() => {
 		request({ url: url, method: 'POST', json: true }, (error, res, body) => {
@@ -451,11 +451,11 @@ function SendMessage(chat_id, text, callback) {
 
 function SendMessageButtons(chat_id, text, buttonLines, callback) {
 	text = GetTextLineForUrl(text);
-	var url = `https://api.telegram.org/${setupsData.telegramBotToken}/sendMessage?chat_id=${chat_id}&text=${text}`;
+	let url = `https://api.telegram.org/${setupsData.telegramBotToken}/sendMessage?chat_id=${chat_id}&text=${text}`;
 	
-	var buttons = [];
+	let buttons = [];
 	buttonLines.forEach(line => {
-		var btnLine = [];
+		let btnLine = [];
 		line.forEach(btn => {
 			btnLine.push([{
 				text: btn,
@@ -466,7 +466,7 @@ function SendMessageButtons(chat_id, text, buttonLines, callback) {
 		buttons.push(btnLine);
 	});
 	
-	var buttonOptions = { 
+	let buttonOptions = { 
 		reply_markup: {
 			keyboard: buttonLines, 
 			resize_keyboard: true, 
@@ -602,7 +602,7 @@ function CraetTables() {
 	setTimeout(() => {
 		runSql("Select * From botsetups", (res) => {
 			if (!res.rows || res.rows.length == 0) {
-				var json = JSON.stringify(setupsData);
+				let json = JSON.stringify(setupsData);
 				runSql(`INSERT INTO public.botsetups(id, json) VALUES (1, '${json}')`, (res) => { });
 			}
 		});
@@ -629,7 +629,7 @@ function CraetTables() {
 }
 
 function ConfirmSetupsSave() {
-	var json = JSON.stringify(setupsData);
+	let json = JSON.stringify(setupsData);
 	runSql(`UPDATE public.botsetups SET json=${json} WHERE id=1;`, (res) => {});
 	
 	runSql(`UPDATE public.adminsetups SET adminid=${adminId} WHERE id=1;`, (res) => {});
@@ -646,7 +646,7 @@ function GetAllChatNames() {
 	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {		
 		if (res != null && res.rows != null && (res.rows.length > 0 || res.rows[0] != null)) {
 			res.rows.forEach(row => {
-				var chatResult = chatResults.find(x => x.id == chat.id);
+				let chatResult = chatResults.find(x => x.id == chat.id);
 				if (chatResult != null) {
 					chatResult.chatName = row.chatname
 				}
