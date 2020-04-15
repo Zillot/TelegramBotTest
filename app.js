@@ -647,16 +647,15 @@ function SaveUserName(chatId, name, chatResult) {
 }
 
 function GetUserName(chatId, chatResult) {
-	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {
+	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {		
+		chatResult.chatId = chatId;
+		
+		if (res != null && res.rows != null && (res.rows.length > 0 || res.rows[0] != null)) {
+			chatResult.chatName = res.rows[0].chatName;
+		}
 		console.log("loaded =============");
 		console.log(chatResult);
 		console.log(res);
 		console.log("loaded =============");
-		
-		chatResult.chatId = chatId;
-		
-		if (res && res.rows && res.rows.length > 0) {
-			chatResult.chatName = res.rows[0].chatName;
-		}
 	});
 }
