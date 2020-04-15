@@ -160,9 +160,7 @@ function PoccessMessage(chat) {
 	
 	if (orderNum < setupsData.steps.length - 1) {
 		if (order == null) {
-			order = {
-				orderNum: 1
-			}		
+			order = posibleOrders[0];
 		}
 		
 		Step(order, lastUserMessage, chat, chatResult);
@@ -307,23 +305,11 @@ function StepAdminRights(lastUserMessage, chat, chatResult) {
 	SetOrderToChat(chat, chatResult, posibleOrders[posibleOrders.length - 3]);
 }
 
-function GoToOrder(lastUserMessage, chat, chatResult, stepNum) {
-	if (stepNum == 1) {
-		Step1(lastUserMessage, chat, chatResult);
+function GoToOrder(order, lastUserMessage, chat, chatResult, stepNum) {
+	if (orderNum < setupsData.steps.length - 1) {
+		Step(order, lastUserMessage, chat, chatResult);
 	}
-	else if (stepNum == 2) {
-		Step2(lastUserMessage, chat, chatResult);
-	}
-	else if (stepNum == 3) {
-		Step3(lastUserMessage, chat, chatResult);
-	}
-	else if (stepNum == 4) {
-		Step4(lastUserMessage, chat, chatResult);
-	}
-	else if (stepNum == 5) {
-		Step5(lastUserMessage, chat, chatResult);
-	}
-	else if (stepNum == 6) {
+	else if (orderNum == setupsData.steps.length) {
 		StepDone(lastUserMessage, chat, chatResult);
 	}
 	else if (stepNum == 100) {
@@ -334,6 +320,13 @@ function GoToOrder(lastUserMessage, chat, chatResult, stepNum) {
 	}
 	else if (stepNum == 102) {
 		StepAdminRights(lastUserMessage, chat, chatResult);
+	}
+	
+		if (order == null) {
+			order = posibleOrders[0];
+		}
+		
+		Step(order, lastUserMessage, chat, chatResult);
 	}
 }
 
@@ -594,8 +587,7 @@ function runSql(script, callback) {
 }
 
 function CraetTables() {
-	SendWebhook(`${defaultServerUrl}/SetWebHooks`, () => {
-	});
+	SendWebhook(`${defaultServerUrl}/SetWebHooks`, () => { });
 	
 	DefaultData();
 	
