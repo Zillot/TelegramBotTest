@@ -640,6 +640,31 @@ function SaveUserName(chatId, name, chatResult) {
 	});
 }
 
+function GetAllChatNames() {
+	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {		
+		if (res != null && res.rows != null && (res.rows.length > 0 || res.rows[0] != null)) {
+			res.rows.forEach(row => {
+				var chatResult = chatResults.find(x => x.id == chat.id);
+				if (chatResult != null) {
+					chatResult.chatName = row.chatname
+				}
+				else {
+					let chatResultNew = {
+						chatId: null,
+						chatName: null,
+						id: chat.id,
+						data: {},
+						prevOrder: null,
+						lastOrder: null,
+					};
+					
+					chatResults.push(chatResultNew);
+				}
+			});
+		}
+	});
+}
+
 function GetUserName(chatId, chatResult) {
 	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {		
 		chatResult.chatId = chatId;
@@ -647,13 +672,5 @@ function GetUserName(chatId, chatResult) {
 		if (res != null && res.rows != null && (res.rows.length > 0 || res.rows[0] != null)) {
 			chatResult.chatName = res.rows[0].chatname;
 		}
-		
-		console.log("Loaded ==========================");
-		console.log(res);
-		console.log("Loaded ==========================");
-		console.log(res.rows[0]);
-		console.log("Loaded ==========================");
-		console.log(chatResult);
-		console.log("Loaded ==========================");
 	});
 }
