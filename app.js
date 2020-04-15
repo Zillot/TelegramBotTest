@@ -159,6 +159,12 @@ function PoccessMessage(chat) {
 	}
 	
 	if (orderNum < setupsData.steps.length - 1) {
+		if (order == null) {
+			order = {
+				orderNum: 1
+			}		
+		}
+		
 		Step(order, lastUserMessage, chat, chatResult);
 	}
 	else if (orderNum == setupsData.steps.length) {
