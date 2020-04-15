@@ -152,12 +152,6 @@ function PoccessMessage(chat) {
 	
 	let orderNum = chatResult.lastOrder == null ? 1 : chatResult.lastOrder.orderNum;
 	
-	if (chatResult.chatName == null) {
-		SendMessage(chat.id, setupsData.helloText, (error, response) => {
-			if (error) { errorHandler(error); }
-		});
-	}
-	
 	if (chatResult.lastOrder == null) {
 		chatResult.lastOrder = posibleOrders[0];
 		chatResult.data = {};
@@ -509,7 +503,6 @@ function LoadSetups() {
 	
 	posibleOrders = userSteps.concat([
 		{ text: setupsData.successText, orderNum: 6, posibleAnsvers: [] },
-		{ text: setupsData.helloText, orderNum: 7, posibleAnsvers: ['/start'] },
 		{ text: setupsData.questionForAdminRights, orderNum: 102, posibleAnsvers: [], command: 'Rights' },
 		{ text: setupsData.questionForAdminSetups, orderNum: 101, posibleAnsvers: [], command: 'Setups' },
 		{ text: setupsData.questionForAdminStep1, orderNum: 100, posibleAnsvers: ButtonsToList(buttonsForAdmin), command: '/admin' }
@@ -522,14 +515,13 @@ function DefaultData() {
 	setupsData = {
 		successText: 'Інформацію отримано. Напиши мені сюди щось щоб створити нову заявку',
 		errorText: 'Будьласка користуйтесь кнопками',
-		helloText: 'Привіт!',
 		noRightsError: 'Вам я на таке не відповім.',
 		
 		publishResultTemplate: 'Нова заявка, COMPANY, USERNAME, PHONE, COMMENT, BUILDING',
 		
 		steps: [
 			{
-				question: "Назва компанії",
+				question: "Привіт! Назва компанії",
 				buttons: []
 			},
 			{
