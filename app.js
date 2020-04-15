@@ -153,10 +153,8 @@ function PoccessMessage(chat) {
 	}
 	
 	var orderNum = chatResult.lastOrder == null ? 1 : chatResult.lastOrder.orderNum;
-	console.log("orderNum IS " + orderNum + "/" + (setupsData.steps.length + 1));
 		
 	if (orderNum == setupsData.steps.length + 1) {
-		console.log("RESTART " + orderNum);
 		chatResult.lastOrder = posibleOrders[1];
 		chatResult.data = {};
 	}
@@ -168,12 +166,10 @@ function PoccessMessage(chat) {
 	}
 	
 	if (chatResult.lastOrder == null) {
-		console.log("NULL Order");
 		chatResult.lastOrder = posibleOrders[0];
 		chatResult.data = {};
 	}	
 
-	console.log("ENTERING INTO IS " + orderNum);
 	if (orderNum < setupsData.steps.length + 1) {	
 		Step(lastUserMessage, chat, chatResult);
 	}
@@ -345,6 +341,10 @@ function CheckStepResult(lastUserMessage, chat, chatResult) {
 	chatResult.data[chatResult.prevOrder.orderNum] = lastUserMessage.message.text;
 	
 	if (chatResult.prevOrder.orderNum == 2) {
+		console.log("try to save =============" + lastUserMessage.message.text);
+		console.log(chatResult);
+		console.log("try to save =============");
+		
 		SaveUserName(chatResult.id, lastUserMessage.message.text, chatResult);
 	}
 
@@ -357,10 +357,7 @@ function ErrorStep(chat) {
 	});
 }
 
-function SetOrderToChat(chat, chatResult, order) {
-	console.log("SetOrderToChat");
-	console.log(chatResult);
-	
+function SetOrderToChat(chat, chatResult, order) {	
 	chatResult.prevOrder = chatResult.lastOrder;
 	chatResult.lastOrder = order;
 }
@@ -650,6 +647,10 @@ function SaveUserName(chatId, name, chatResult) {
 	runSql(`INSERT INTO public.telegramusers(chatId, chatName) VALUES (${chatId}, '${name}')`, (res) => {
 		chatResult.chatId = chatId;
 		chatResult.chatName = name;
+		console.log("saved =============");
+		console.log(chatResult);
+		console.log(res);
+		console.log("saved =============");
 	});
 }
 
