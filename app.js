@@ -153,8 +153,10 @@ function PoccessMessage(chat) {
 	}
 	
 	var orderNum = chatResult.lastOrder == null ? 1 : chatResult.lastOrder.orderNum;
-	
+	console.log("orderNum IS " + orderNum);
+		
 	if (orderNum == setupsData.steps.length + 1) {
+		console.log("RESTART " + orderNum);
 		chatResult.lastOrder = posibleOrders[2];
 		chatResult.data = {};
 	}
@@ -166,18 +168,10 @@ function PoccessMessage(chat) {
 	}
 	
 	if (chatResult.lastOrder == null) {
+		console.log("NULL Order");
 		chatResult.lastOrder = posibleOrders[0];
 		chatResult.data = {};
-	}
-	
-	console.log("debugger 6============");
-	console.log(chatResult);
-	console.log(lastUserMessage);
-	console.log("debugger 6============");
-	console.log(orderNum);
-	console.log(setupsData.steps.length);
-	console.log("debugger 6============");
-	
+	}	
 
 	if (orderNum < setupsData.steps.length + 1) {	
 		Step(lastUserMessage, chat, chatResult);
