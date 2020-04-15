@@ -118,9 +118,9 @@ function PoccessMessage(chat) {
 	
 	if (lastUserMessage != null && lastUserMessage.message.text != null) {
 		if (lastUserMessage.message.text == '/start') {
-			chatResult.prevOrder: null;
-			chatResult.lastOrder: null;
-			chatResult.data: {};
+			chatResult.prevOrder = null;
+			chatResult.lastOrder = null;
+			chatResult.data = {};
 			Step(lastUserMessage, chat, chatResult);
 			return;
 		}
