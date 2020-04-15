@@ -173,6 +173,7 @@ function PoccessMessage(chat) {
 		chatResult.data = {};
 	}	
 
+	console.log("ENTERING INTO IS " + orderNum);
 	if (orderNum < setupsData.steps.length + 1) {	
 		Step(lastUserMessage, chat, chatResult);
 	}
@@ -185,11 +186,7 @@ function PoccessMessage(chat) {
 }
 
 //hello, select flow
-function Step(lastUserMessage, chat, chatResult) {	
-	console.log("enter step ==============");
-	console.log(chatResult);
-	console.log("enter step ==============");
-	
+function Step(lastUserMessage, chat, chatResult) {		
 	if (chatResult.lastOrder.orderNum == 1 && chatResult.chatName != null) {
 		SetOrderToChat(chat, chatResult, posibleOrders[chatResult.lastOrder.orderNum]);
 		Step(lastUserMessage, chat, chatResult);
@@ -215,10 +212,6 @@ function Step(lastUserMessage, chat, chatResult) {
 			if (error) { errorHandler(error); }
 		});
 	}
-	
-	console.log("leaving step ==============");
-	console.log(chatResult);
-	console.log("leaving step ==============");
 	
 	SetOrderToChat(chat, chatResult, posibleOrders[chatResult.lastOrder.orderNum]);
 }
