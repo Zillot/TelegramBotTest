@@ -126,6 +126,9 @@ function PoccessMessage(chat) {
 	
 	if (lastUserMessage != null && lastUserMessage.message.text != null) {
 		order = posibleOrders.find(x => x.command == lastUserMessage.message.text);
+		if (!order) {
+			order = posibleOrders[0];
+		}
 		
 		if (order != null) {
 			if(!IsAdmin(chat, lastUserMessage)) {
@@ -160,19 +163,13 @@ function PoccessMessage(chat) {
 		});
 	}
 
-	if (orderNum < setupsData.steps.length - 1) {
-		if (!order) {
-			order = posibleOrders[0];
-		}
-	
+	if (orderNum < setupsData.steps.length - 1) {	
 		console.log("DEBUGGER");
 		
 		console.log(lastUserMessage);
 		console.log(order);
 		
 		console.log("DEBUGGER");
-		
-		SetOrderToChat(chat, chatResult, order);
 		Step(order, lastUserMessage, chat, chatResult);
 	}
 	else if (orderNum == setupsData.steps.length) {
