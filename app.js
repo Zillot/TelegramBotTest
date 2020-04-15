@@ -337,10 +337,6 @@ function CheckStepResult(lastUserMessage, chat, chatResult) {
 	chatResult.data[chatResult.prevOrder.orderNum] = lastUserMessage.message.text;
 	
 	if (chatResult.prevOrder.orderNum == 1) {
-		console.log("try to save =============" + lastUserMessage.message.text);
-		console.log(chatResult);
-		console.log("try to save =============");
-		
 		SaveUserName(chatResult.id, lastUserMessage.message.text, chatResult);
 	}
 
@@ -651,11 +647,7 @@ function GetUserName(chatId, chatResult) {
 		chatResult.chatId = chatId;
 		
 		if (res != null && res.rows != null && (res.rows.length > 0 || res.rows[0] != null)) {
-			chatResult.chatName = res.rows[0].chatName;
+			chatResult.chatName = res.rows[0].chatname;
 		}
-		console.log("loaded =============");
-		console.log(chatResult);
-		console.log(res);
-		console.log("loaded =============");
 	});
 }
