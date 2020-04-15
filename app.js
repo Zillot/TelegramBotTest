@@ -91,10 +91,6 @@ function PoccessMessage(chat) {
 		GetUserName(chat.id, chatResult);
 	}
 	
-	console.log("debugger ============");
-	console.log(chatResult);
-	console.log(lastUserMessage);
-	console.log("debugger ============");
 	let lastUserMessage = null;
 	if (chat.thread.length > 0) {
 		lastUserMessage = chat.thread[chat.thread.length - 1];
