@@ -593,6 +593,8 @@ function CraetTables() {
 	runSql("CREATE TABLE IF NOT EXISTS telegramusers ( id serial PRIMARY KEY, chatId int, chatName TEXT )", (res) => {});
 	
 	setTimeout(() => {
+		GetAllChatNames();
+		
 		runSql("Select * From botsetups", (res) => {
 			if (!res.rows || res.rows.length == 0) {
 				let json = JSON.stringify(setupsData);
@@ -659,8 +661,6 @@ function GetAllChatNames() {
 				}
 			});
 		}
-		
-		console.log(chatResults);
 	});
 }
 
