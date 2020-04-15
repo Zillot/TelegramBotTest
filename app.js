@@ -120,6 +120,7 @@ function PoccessMessage(chat) {
 		if (lastUserMessage.message.text == '/start') {
 			chatResult.prevOrder: null;
 			chatResult.lastOrder: null;
+			chatResult.data: {};
 			Step(lastUserMessage, chat, chatResult);
 			return;
 		}
