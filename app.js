@@ -80,7 +80,6 @@ function PoccessMessage(chat) {
 	let chatResult = chatResults.find(x => x.id == chat.id);
 	if (chatResult == null) {
 		chatResult = {
-			chatId: null,
 			chatName: null,
 			id: chat.id,
 			data: {},
@@ -633,7 +632,6 @@ function SaveUserName(chatId, name, chatResult) {
 	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {		
 		if (!res.rows || res.rows.length == 0) {
 			runSql(`INSERT INTO public.telegramusers(chatId, chatName) VALUES (${chatId}, '${name}')`, (res) => {
-				chatResult.chatId = chatId;
 				chatResult.chatName = name;
 			});
 		}
@@ -650,9 +648,8 @@ function GetAllChatNames() {
 				}
 				else {
 					let chatResultNew = {
-						chatId: row.chatid,
 						chatName: row.chatname,
-						id: chat.id,
+						id: row.chatid,
 						data: {},
 						prevOrder: null,
 						lastOrder: null,
@@ -666,9 +663,7 @@ function GetAllChatNames() {
 }
 
 function GetUserName(chatId, chatResult) {
-	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {		
-		chatResult.chatId = chatId;
-		
+	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {				
 		if (res != null && res.rows != null && (res.rows.length > 0 || res.rows[0] != null)) {
 			chatResult.chatName = res.rows[0].chatname;
 		}
