@@ -154,7 +154,7 @@ function PoccessMessage(chat) {
 	
 	var orderNum = chatResult.lastOrder == null ? 1 : chatResult.lastOrder.orderNum;
 	
-	if (orderNum == setupsData.steps.length) {
+	if (orderNum == setupsData.steps.length + 1) {
 		chatResult.lastOrder = posibleOrders[2];
 		chatResult.data = {};
 	}
@@ -175,14 +175,14 @@ function PoccessMessage(chat) {
 	console.log(lastUserMessage);
 	console.log("debugger 6============");
 	console.log(orderNum);
-	console.log(setupsData.steps.length - 1);
+	console.log(setupsData.steps.length);
 	console.log("debugger 6============");
 	
 
 	if (orderNum < setupsData.steps.length + 1) {	
 		Step(lastUserMessage, chat, chatResult);
 	}
-	else if (orderNum == setupsData.steps.length) {
+	else if (orderNum == setupsData.steps.length + 1) {
 		StepDone(lastUserMessage, chat, chatResult);
 	}
 	else if (chatResult.lastOrder.orderNum == 100) {
@@ -328,10 +328,10 @@ function StepAdminRights(lastUserMessage, chat, chatResult) {
 }
 
 function GoToOrder(lastUserMessage, chat, chatResult, stepNum) {
-	if (stepNum < setupsData.steps.length - 1) {
+	if (stepNum < setupsData.steps.length + 1) {
 		Step(lastUserMessage, chat, chatResult);
 	}
-	else if (stepNum == setupsData.steps.length) {
+	else if (stepNum == setupsData.steps.length + 1) {
 		StepDone(lastUserMessage, chat, chatResult);
 	}
 	else if (stepNum == 100) {
