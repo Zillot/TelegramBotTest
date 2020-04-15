@@ -158,8 +158,10 @@ function PoccessMessage(chat) {
 	if (chatResult.lastOrder && chatResult.lastOrder.orderNum >= 100) {
 		if(!IsAdmin(chat, lastUserMessage)) {
 			chatResult.lastOrder = null;
+			console.log("ADMIN ERROR 1 ============");
 			return;
 		}
+			console.log("ADMIN ERROR 2 ============");
 		
 		CheckAdminStep(chat, chatResult, chatResult.lastOrder.orderNum, lastUserMessage);
 	}
