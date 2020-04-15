@@ -337,18 +337,18 @@ function GoToOrder(lastUserMessage, chat, chatResult, stepNum) {
 }
 
 function CheckStepResult(lastUserMessage, chat, chatResult) {
-	if (chatResult.prevStep == null) {
+	if (chatResult.prevOrder == null) {
 		return false;
 	}
 	
-	if (chatResult.prevStep.posibleAnsvers.length > 0 && !chatResult.prevStep.posibleAnsvers.find(x => x == lastUserMessage.message.text)) {
+	if (chatResult.prevOrder.posibleAnsvers.length > 0 && !chatResult.prevOrder.posibleAnsvers.find(x => x == lastUserMessage.message.text)) {
 		ErrorStep(chat);
 		return true;
 	}
 	
-	chatResult.data[chatResult.prevStep.orderNum] = lastUserMessage.message.text;
+	chatResult.data[chatResult.prevOrder.orderNum] = lastUserMessage.message.text;
 	
-	if (chatResult.prevStep.orderNum == 2) {
+	if (chatResult.prevOrder.orderNum == 2) {
 		SaveUserName(chatResult.id, lastUserMessage.message.text, chatResult);
 	}
 
@@ -362,7 +362,7 @@ function ErrorStep(chat) {
 }
 
 function SetOrderToChat(chat, chatResult, order) {
-	chatResult.prevStep = chatResult.lastOrder;
+	chatResult.prevOrder = chatResult.lastOrder;
 	chatResult.lastOrder = order;
 }
 
