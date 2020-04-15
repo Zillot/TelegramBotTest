@@ -321,13 +321,6 @@ function GoToOrder(order, lastUserMessage, chat, chatResult, stepNum) {
 	else if (stepNum == 102) {
 		StepAdminRights(lastUserMessage, chat, chatResult);
 	}
-	
-		if (order == null) {
-			order = posibleOrders[0];
-		}
-		
-		Step(order, lastUserMessage, chat, chatResult);
-	}
 }
 
 function CheckStepResult(lastUserMessage, chat, chatResult) {
