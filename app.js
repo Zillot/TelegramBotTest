@@ -196,6 +196,9 @@ function PoccessMessage(chat) {
 	console.log(chatResult);
 	console.log(lastUserMessage);
 	console.log("debugger 6============");
+	console.log(orderNum);
+	console.log(setupsData.steps.length - 1);
+	console.log("debugger 6============");
 	
 
 	if (orderNum < setupsData.steps.length - 1) {	
