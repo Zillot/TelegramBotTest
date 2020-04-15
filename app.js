@@ -163,6 +163,7 @@ function PoccessMessage(chat) {
 			order = posibleOrders[0];
 		}
 		
+		SetOrderToChat(chat, chatResult, order);
 		Step(order, lastUserMessage, chat, chatResult);
 	}
 	else if (orderNum == setupsData.steps.length) {
