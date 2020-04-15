@@ -213,6 +213,9 @@ function StepDone(lastUserMessage, chat, chatResult) {
 	templatedData = templatedData.replace("COMMENT", chatResult.data[5]);
 	templatedData = templatedData.replace("USERNAME", `${lastUserMessage.message.from.first_name} ${lastUserMessage.message.from.last_name}`);
 	
+	
+	SaveUserName(chatResult.id, chatResult.chatName, chatResult);
+	
 	console.log(templatedData);
 	
 	SetOrderToChat(chat, chatResult, null);
@@ -327,10 +330,6 @@ function CheckStepResult(lastUserMessage, chat, chatResult) {
 	}
 	
 	chatResult.data[chatResult.prevOrder.orderNum] = lastUserMessage.message.text;
-	
-	if (chatResult.prevOrder.orderNum == 1) {
-		SaveUserName(chatResult.id, lastUserMessage.message.text, chatResult);
-	}
 
 	return false;
 }
@@ -626,9 +625,13 @@ function ConfirmSetupsSave() {
 }
 
 function SaveUserName(chatId, name, chatResult) {
-	runSql(`INSERT INTO public.telegramusers(chatId, chatName) VALUES (${chatId}, '${name}')`, (res) => {
-		chatResult.chatId = chatId;
-		chatResult.chatName = name;
+	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {		
+		if (res != null && res.rows != null && (res.rows.length == 0)) {
+			runSql(`INSERT INTO public.telegramusers(chatId, chatName) VALUES (${chatId}, '${name}')`, (res) => {
+				chatResult.chatId = chatId;
+				chatResult.chatName = name;
+			});
+		}
 	});
 }
 
