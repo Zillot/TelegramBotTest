@@ -161,7 +161,7 @@ function PoccessMessage(chat) {
 	}
 
 	if (orderNum < setupsData.steps.length - 1) {
-		if (order == null) {
+		if (!order) {
 			order = posibleOrders[0];
 		}
 	
