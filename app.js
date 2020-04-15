@@ -17,6 +17,7 @@ const defaultDBCOnnection = {
 const defaultTelegramBotToken = 'bot1268644831:AAG9mllT8DhDqz1uaD4yUt2k4_Vk6-hlqhk';
 const defaultTelegramChatIdToPublish = -458746802;
 const defaultAdminId = 267835012;
+const defaultServerUrl = 'https://telegram-bot-test-by-mykola.herokuapp.com'
 // ======= CHANGE BEFORE USE END
 
 const PORT = process.env.PORT || 5000
@@ -42,6 +43,9 @@ express()
 	.get('/', (req, res) => res.send(cool()))
 	.get('/SetDefaults', (requester, responcer) => {
 		DefaultData();
+		ConfirmSetupsSave();
+		
+		responcer.send("success");
 	})
 	.post('/SetWebHooks', (requester, responcer) => {
 		var message = requester.body;
@@ -584,7 +588,7 @@ function runSql(script, callback) {
 }
 
 function CraetTables() {
-	SendWebhook("https://telegram-bot-test-by-mykola.herokuapp.com/SetWebHooks", () => {
+	SendWebhook(`${defaultServerUrl}/SetWebHooks`, () => {
 	});
 	
 	DefaultData();
