@@ -81,6 +81,7 @@ function PoccessMessage(chat) {
 	if (chatResult == null) {
 		chatResult = {
 			userId: null,
+			chatName: null,
 			id: chat.id,
 			data: {},
 			lastOrder: null,
@@ -158,13 +159,19 @@ function PoccessMessage(chat) {
 			if (error) { errorHandler(error); }
 		});
 	}
-	
+
 	if (orderNum < setupsData.steps.length - 1) {
 		if (order == null) {
 			order = posibleOrders[0];
 		}
+	
+		console.log("DEBUGGER");
 		
+		console.log(lastUserMessage);
 		console.log(order);
+		
+		console.log("DEBUGGER");
+		
 		SetOrderToChat(chat, chatResult, order);
 		Step(order, lastUserMessage, chat, chatResult);
 	}
@@ -178,7 +185,7 @@ function PoccessMessage(chat) {
 
 //hello, select flow
 function Step(order, lastUserMessage, chat, chatResult) {	
-	if (order.orderNum == 1 && chatResult.user != null) {
+	if (order.orderNum == 1 && chatResult.chatName != null) {
 		Step(order = posibleOrders[1], lastUserMessage, chat, chatResult);
 		return;
 	}
@@ -209,7 +216,7 @@ function Step(order, lastUserMessage, chat, chatResult) {
 		});
 	}
 	
-	SetOrderToChat(chat, chatResult, posibleOrders[order.orderNum]);
+	SetOrderToChat(chat, chatResult, posibleOrders[order.orderNum + 1]);
 }
 
 function StepDone(lastUserMessage, chat, chatResult) {
@@ -333,7 +340,6 @@ function CheckStepResult(lastUserMessage, chat, chatResult) {
 		return true;
 	}
 	
-	console.log(chatResult)
 	chatResult.data[chatResult.lastOrder.orderNum] = lastUserMessage.message.text;
 	
 	if (chatResult.lastOrder.orderNum == 2) {
@@ -526,7 +532,7 @@ function DefaultData() {
 		helloText: 'Привіт!',
 		noRightsError: 'Вам я на таке не відповім.',
 		
-		publishResultTemplate: 'Нова заявка, USERNAME, PHONE, COMMENT, BUILDING',
+		publishResultTemplate: 'Нова заявка, COMPANY, USERNAME, PHONE, COMMENT, BUILDING',
 		
 		steps: [
 			{
@@ -638,11 +644,16 @@ function ConfirmSetupsSave() {
 function SaveUserName(chatId, name, chatResult) {
 	runSql(`INSERT INTO public.users(userId, name) VALUES (${chatId}, '${name}')`, (res) => {
 		chatResult.userId = chatId;
+		chatResult.chatName = name;
 	});
 }
 
 function GetUserName(chatId, chatResult) {
 	runSql(`Select * From botsetups Where userId = ${chatId}`, (res) => {
 		chatResult.userId = chatId;
+		
+		if (res.rows && res.rows.length > 0) {
+			chatResult.chatName = res.rows[0].name;
+		}
 	});
 }
