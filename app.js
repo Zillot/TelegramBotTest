@@ -340,7 +340,7 @@ function CheckStepResult(lastUserMessage, chat, chatResult) {
 	
 	chatResult.data[chatResult.prevOrder.orderNum] = lastUserMessage.message.text;
 	
-	if (chatResult.prevOrder.orderNum == 2) {
+	if (chatResult.prevOrder.orderNum == 1) {
 		console.log("try to save =============" + lastUserMessage.message.text);
 		console.log(chatResult);
 		console.log("try to save =============");
