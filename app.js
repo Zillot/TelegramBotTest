@@ -153,11 +153,11 @@ function PoccessMessage(chat) {
 	}
 	
 	var orderNum = chatResult.lastOrder == null ? 1 : chatResult.lastOrder.orderNum;
-	console.log("orderNum IS " + orderNum);
+	console.log("orderNum IS " + orderNum + "/" + (setupsData.steps.length + 1));
 		
 	if (orderNum == setupsData.steps.length + 1) {
 		console.log("RESTART " + orderNum);
-		chatResult.lastOrder = posibleOrders[2];
+		chatResult.lastOrder = posibleOrders[1];
 		chatResult.data = {};
 	}
 	
