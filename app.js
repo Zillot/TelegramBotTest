@@ -86,6 +86,7 @@ function PoccessMessage(chat) {
 			lastOrder: null,
 		};
 		chatResults.push(chatResult);
+		GetUserName(chat.id, chatResult);
 	}
 	
 	let lastUserMessage = null;
@@ -163,7 +164,7 @@ function PoccessMessage(chat) {
 			order = posibleOrders[0];
 		}
 		
-		concole.log(order);
+		console.log(order);
 		SetOrderToChat(chat, chatResult, order);
 		Step(order, lastUserMessage, chat, chatResult);
 	}
@@ -177,8 +178,9 @@ function PoccessMessage(chat) {
 
 //hello, select flow
 function Step(order, lastUserMessage, chat, chatResult) {	
-	if (order.orderNum == 1) {
-		//TODO
+	if (order.orderNum == 1 && chatResult.user != null) {
+		Step(order = posibleOrders[1], lastUserMessage, chat, chatResult);
+		return;
 	}
 
 	if (order.orderNum != 2) {
@@ -333,6 +335,10 @@ function CheckStepResult(lastUserMessage, chat, chatResult) {
 	
 	console.log(chatResult)
 	chatResult.data[chatResult.lastOrder.orderNum] = lastUserMessage.message.text;
+	
+	if (chatResult.lastOrder.orderNum == 2) {
+		SaveUserName(chatResult.id, lastUserMessage.message.text);
+	}
 
 	return false;
 }
@@ -629,13 +635,14 @@ function ConfirmSetupsSave() {
 	runSql(`UPDATE public.adminsetups SET adminid=${adminId} WHERE id=1;`, (res) => {});
 }
 
-function SaveUserName(userId, name) {
-	runSql(`INSERT INTO public.users(userId, name) VALUES (${userId}, '${name}')`, (res) => {});
+function SaveUserName(userId, name, chatResult) {
+	runSql(`INSERT INTO public.users(userId, name) VALUES (${userId}, '${name}')`, (res) => {
+		chatResult.userId = userId;
+	});
 }
 
-function GetUserName(userId, chatResult) {
-	runSql(`Select * From botsetups Where userId = ${userId}`, (res) => {
-		var chatResult = chatResults.find(x => x.id == chat.id);
+function GetUserName(chatId, chatResult) {
+	runSql(`Select * From botsetups Where userId = ${chatId}`, (res) => {
 		chatResult.userId = userId;
 	});
 }
