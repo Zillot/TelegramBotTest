@@ -82,7 +82,7 @@ function PoccessMessage(chat) {
 		chatResult = {
 			userId: null,
 			id: chat.id,
-			data: null,
+			data: {},
 			lastOrder: null,
 		};
 		chatResults.push(chatResult);
@@ -183,6 +183,10 @@ function Step(order, lastUserMessage, chat, chatResult) {
 		return;
 	}
 
+	if (order.orderNum == 2) {
+		chatResult.data = {};
+	}
+
 	if (order.orderNum != 2) {
 		if (CheckStepResult(lastUserMessage, chat, chatResult)) { return; }
 	}
@@ -203,10 +207,6 @@ function Step(order, lastUserMessage, chat, chatResult) {
 		SendMessage(chat.id, setupsData.steps[order.orderNum].question, (error, response) => {
 			if (error) { errorHandler(error); }
 		});
-	}
-	
-	if (order.orderNum == 2) {
-		chatResult.data = {};
 	}
 	
 	SetOrderToChat(chat, chatResult, posibleOrders[order.orderNum]);
