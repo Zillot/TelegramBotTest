@@ -656,6 +656,11 @@ function SaveUserName(chatId, name, chatResult) {
 
 function GetUserName(chatId, chatResult) {
 	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {
+		console.log("loaded =============");
+		console.log(chatResult);
+		console.log(res);
+		console.log("loaded =============");
+		
 		chatResult.chatId = chatId;
 		
 		if (res && res.rows && res.rows.length > 0) {
