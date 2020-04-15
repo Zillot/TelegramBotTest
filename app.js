@@ -641,7 +641,7 @@ function SaveUserName(chatId, name, chatResult) {
 }
 
 function GetAllChatNames() {
-	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {		
+	runSql(`Select * From telegramusers`, (res) => {		
 		if (res != null && res.rows != null && (res.rows.length > 0 || res.rows[0] != null)) {
 			res.rows.forEach(row => {
 				let chatResult = chatResults.find(x => x.id == row.chatid);
