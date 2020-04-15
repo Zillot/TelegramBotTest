@@ -80,7 +80,7 @@ function PoccessMessage(chat) {
 	var chatResult = chatResults.find(x => x.id == chat.id);
 	if (chatResult == null) {
 		chatResult = {
-			userId: null,
+			chatId: null,
 			chatName: null,
 			id: chat.id,
 			data: {},
@@ -604,7 +604,7 @@ function CraetTables() {
 	
 	runSql("CREATE TABLE IF NOT EXISTS adminsetups ( id int, adminId TEXT )", (res) => {});
 	
-	runSql("CREATE TABLE IF NOT EXISTS users ( id int SERIAL, userId int, name TEXT )", (res) => {});
+	runSql("CREATE TABLE IF NOT EXISTS telegramusers ( id int SERIAL, chatId int, chatName TEXT )", (res) => {});
 	
 	setTimeout(() => {
 		runSql("Select * From botsetups", (res) => {
@@ -643,18 +643,18 @@ function ConfirmSetupsSave() {
 }
 
 function SaveUserName(chatId, name, chatResult) {
-	runSql(`INSERT INTO public.users(userId, name) VALUES (${chatId}, '${name}')`, (res) => {
-		chatResult.userId = chatId;
+	runSql(`INSERT INTO public.telegramusers(chatId, chatName) VALUES (${chatId}, '${name}')`, (res) => {
+		chatResult.chatId = chatId;
 		chatResult.chatName = name;
 	});
 }
 
 function GetUserName(chatId, chatResult) {
-	runSql(`Select * From users Where userId = ${chatId}`, (res) => {
-		chatResult.userId = chatId;
+	runSql(`Select * From telegramusers Where chatId = ${chatId}`, (res) => {
+		chatResult.chatId = chatId;
 		
 		if (res && res.rows && res.rows.length > 0) {
-			chatResult.chatName = res.rows[0].name;
+			chatResult.chatName = res.rows[0].chatName;
 		}
 	});
 }
