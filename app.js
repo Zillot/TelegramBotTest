@@ -163,8 +163,10 @@ function PoccessMessage(chat) {
 		chatResult.data = {};
 	}	
 
-	if (orderNum < setupsData.steps.length + 1) {	
-		Step(lastUserMessage, chat, chatResult);
+	if (orderNum < setupsData.steps.length + 1) {
+		setTimeout(() => {		
+			Step(lastUserMessage, chat, chatResult);
+		}, 400);
 	}
 	else if (orderNum == setupsData.steps.length + 1) {
 		StepDone(lastUserMessage, chat, chatResult);
