@@ -179,7 +179,7 @@ function Step(lastUserMessage, chat, chatResult) {
 
 	let text = lastUserMessage.message.text;
 	let override = setupsData.navigationMapOverride.find(x => x.btnText == text);
-	if (override != null) {
+	if (override != null && chatResult.prevOrder != null) {
 		GoToOrder(lastUserMessage, chat, chatResult, override.stepNum);
 		return;
 	}
@@ -216,8 +216,7 @@ function StepDone(lastUserMessage, chat, chatResult) {
 	templatedData = templatedData.replace("PHONE", chatResult.data[4]);
 	templatedData = templatedData.replace("COMMENT", chatResult.data[5]);
 	templatedData = templatedData.replace("USERNAME", `${lastUserMessage.message.from.first_name} ${lastUserMessage.message.from.last_name}`);
-	
-	
+
 	SaveUserName(chatResult.id, chatResult.chatName, chatResult);
 	
 	console.log(templatedData);
