@@ -206,12 +206,17 @@ function StepDone(lastUserMessage, chat, chatResult) {
 	
 	if (chatResult.chatName == null) {
 		chatResult.chatName = chatResult.data[1];
+	}	
+	
+	let building = chatResult.data[3];
+	if (building == null || building -= undefined){
+		building = "";
 	}
 	
 	let templatedData = setupsData.publishResultTemplate + "";
 	templatedData = templatedData.replace("COMPANY", chatResult.chatName);
 	templatedData = templatedData.replace("WORK", chatResult.data[2]);
-	templatedData = templatedData.replace("BUILDING", chatResult.data[3]);
+	templatedData = templatedData.replace("BUILDING", building);
 	templatedData = templatedData.replace("PHONE", chatResult.data[4]);
 	templatedData = templatedData.replace("COMMENT", chatResult.data[5]);
 	templatedData = templatedData.replace("USERNAME", `${lastUserMessage.message.from.first_name} ${lastUserMessage.message.from.last_name}`);
