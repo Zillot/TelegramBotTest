@@ -133,7 +133,6 @@ function PoccessMessage(chat) {
 				return;
 			}
 	
-			SetOrderToChat(chat, chatResult, order);
 			GoToOrder(lastUserMessage, chat, chatResult, order.orderNum);
 			
 			return;
@@ -550,7 +549,7 @@ function DefaultData() {
 		telegramBotToken: defaultTelegramBotToken,
 		
 		navigationMapOverride: [
-			{ btnText: "Бухгалтерія", stepNum: 4 }
+			{ btnText: "Бухгалтерія", stepNum: 3 }
 		],
 		
 		questionForAdminStep1: 'Що треба змінити?',
