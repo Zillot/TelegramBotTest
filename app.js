@@ -307,6 +307,7 @@ function StepAdminRights(lastUserMessage, chat, chatResult) {
 
 function GoToOrder(lastUserMessage, chat, chatResult, stepNum) {
 	SetOrderToChat(chat, chatResult, posibleOrders[stepNum]);
+	chatResult.prevOrder = null;
 			
 	if (stepNum < setupsData.steps.length + 1) {
 		Step(lastUserMessage, chat, chatResult);
