@@ -37,6 +37,8 @@ var chatResults = [];
 
 var globalMessages = [];
 
+var loadingDone = false;
+
 express()
 	.use(express.json())
 	.use(express.static(path.join(__dirname, 'public')))
@@ -50,13 +52,29 @@ express()
 	.post('/SetWebHooks', (requester, responcer) => {
 		let message = requester.body;
 		
-		Loop([message]);
+		if (loadingDone == true) {
+			retTry([message]);
+		}
+		else {
+			
+		}
 		
 		responcer.send("success");
 	})
 	.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 	
 CraetTables();
+
+function retTry(messages) {
+	if (loadingDone == true) {
+		Loop(messages);
+	}
+	else {
+		setTimeout(() => {
+			retTry(messages);
+		}, 2000);
+	}
+}
 
 function Loop(newMessages) {
 	let mesages = "";
@@ -513,7 +531,9 @@ function LoadSetups() {
 		{ text: setupsData.questionForAdminRights, orderNum: 102, posibleAnsvers: [], command: 'Rights' },
 		{ text: setupsData.questionForAdminSetups, orderNum: 101, posibleAnsvers: [], command: 'Setups' },
 		{ text: setupsData.questionForAdminStep1, orderNum: 100, posibleAnsvers: ButtonsToList(buttonsForAdmin), command: '/admin' }
-	])
+	]);
+	
+	loadingDone = true;
 }
 
 function DefaultData() {
