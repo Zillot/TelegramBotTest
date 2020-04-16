@@ -52,12 +52,7 @@ express()
 	.post('/SetWebHooks', (requester, responcer) => {
 		let message = requester.body;
 		
-		if (loadingDone == true) {
-			retTry([message]);
-		}
-		else {
-			
-		}
+		retTry([message]);
 		
 		responcer.send("success");
 	})
