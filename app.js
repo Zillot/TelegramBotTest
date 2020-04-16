@@ -123,10 +123,8 @@ function PoccessMessage(chat) {
 		}
 	}
 	
-	let order = null;
-	
 	if (lastUserMessage != null && lastUserMessage.message.text != null) {
-		order = posibleOrders.find(x => x.command == lastUserMessage.message.text);
+		let order = posibleOrders.find(x => x.command == lastUserMessage.message.text);
 		
 		if (order != null) {
 			if(!IsAdmin(chat, lastUserMessage)) {
@@ -148,12 +146,12 @@ function PoccessMessage(chat) {
 		CheckAdminStep(chat, chatResult, chatResult.lastOrder.orderNum, lastUserMessage);
 	}
 	
-	let orderNum = chatResult.lastOrder == null ? 1 : chatResult.lastOrder.orderNum;
-	
-	if (chatResult.lastOrder == null) {
+	if (chatResult.lastOrder == null || chatResult.lastOrder == undefined) {
 		chatResult.lastOrder = posibleOrders[0];
 		chatResult.data = {};
 	}	
+	
+	let orderNum = chatResult.lastOrder.orderNum;
 
 	if (orderNum < setupsData.steps.length + 1) {	
 		Step(lastUserMessage, chat, chatResult);
