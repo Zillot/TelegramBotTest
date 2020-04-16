@@ -207,7 +207,7 @@ function StepDone(lastUserMessage, chat, chatResult) {
 	}	
 	
 	let building = chatResult.data[3];
-	if (building == null || building -= undefined){
+	if (building == null || building == undefined){
 		building = "";
 	}
 	
