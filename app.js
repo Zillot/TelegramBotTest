@@ -639,7 +639,7 @@ function CraetTables() {
 			
 			LoadSetups();
 			
-			console.log(setupsData);
+			console.log(JSON.stringify(setupsData));
 			
 		}, 5000);
 	}, 1000)
