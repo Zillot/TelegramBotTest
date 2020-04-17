@@ -638,6 +638,9 @@ function CraetTables() {
 			});
 			
 			LoadSetups();
+			
+			console.log(posibleAnsvers);
+			
 		}, 5000);
 	}, 1000)
 }
@@ -646,7 +649,7 @@ function ConfirmSetupsSave() {
 	let json = JSON.stringify(setupsData);
 	runSql(`UPDATE public.botsetups SET json='${json}' WHERE id=1;`, (res) => {});
 	
-	runSql(`UPDATE public.adminsetups SET adminid=${adminId} WHERE id=1;`, (res) => {});
+	runSql(`UPDATE public.adminsetups SET adminid=${adminId} WHERE id=1;`, (res) => { LoadSetups(); });
 }
 
 function SaveUserName(chatId, name, chatResult) {
