@@ -635,12 +635,9 @@ function CraetTables() {
 			runSql("Select * From botsetups", (res) => {
 				let json = res.rows[0].json;
 				setupsData = JSON.parse(json);
-			});
 			
-			LoadSetups();
-			
-			console.log(JSON.stringify(setupsData));
-			
+				LoadSetups();
+			});			
 		}, 5000);
 	}, 1000)
 }
